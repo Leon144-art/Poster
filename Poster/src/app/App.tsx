@@ -142,8 +142,8 @@ export default function App() {
       panelText: 'text-slate-300'
     },
     6: {
-      pageBg: 'bg-[#e2e8f0]', // 更深的底，衬托出海报
-      posterBg: 'bg-[#f1f5f9]', // 稍微带点冷灰调，不再刺眼
+      pageBg: 'bg-[#e2e8f0]', // 更深的底，衬托出海报 #e2e8f0
+      posterBg: 'bg-[#eff3f7]', // 稍微带点冷灰调，不再刺眼 #f1f5f9 #caced1 #eff3f7
       posterRing: 'ring-slate-300',
       posterText: 'text-slate-700', // 柔和深灰
       gridOpacity: 'opacity-[0.25]', // 让网格稍微明显一点点增加细节
@@ -167,10 +167,10 @@ export default function App() {
       // linedivider: 'bg-slate-300/100',
       marker: 'bg-slate-400',
       // 清透白玻璃卡片，边缘采用冷灰光
-      panelBase: 'bg-white/60 border-white/80 shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-lg',
-      panelBase_line: 'bg-white/30 border-white/0 shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-lg',
+      panelBase: 'bg-white/70 border-white/80 shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-lg',
+      panelBase_line: 'bg-white/50 border-white/0 shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-sm',
       panelInner: 'bg-gradient-to-br from-white/90 to-white/40 border-white/60',
-      panelInner_line: 'bg-gradient-to-br from-white/90 to-white/40 border-white/60',
+      panelInner_line: 'bg-gradient-to-br from-white/30 to-white/30 border-white/60 ',
       panelText: 'text-slate-600',
       trailStroke: '#7dd3fc',
       trailGlow: 'rgba(125,211,252,0.18)',
@@ -284,9 +284,28 @@ int main() {
           */}
 
           {/* 新的 ROI HUD 视窗面板 */}
-          <div className={`absolute top-[12%] right-[8%] w-64 h-72 ${theme.panelBase_line || 'bg-gradient-to-br from-white/60 to-white/10 border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.04)]'} backdrop-blur-md border border-white/40 rounded-2xl p-4 flex flex-col transform rotate-2 pointer-events-auto`}>
-            {/* Header: ROI Camera/Algorithm Info */}
-            <div className="flex items-center justify-between px-1 mb-3">
+          <div className="absolute top-[12%] right-[8%] w-64 h-72 transform rotate-2 pointer-events-auto">
+            
+            {/* 1. 背景镂空层：负责提供模糊、渐变、以及外部圆角边框 */}
+            <div 
+              className={`absolute inset-0 rounded-2xl ${theme.panelBase_line || 'bg-gradient-to-br from-white/60 to-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.04)] backdrop-blur-md border border-white/40'} pointer-events-none`}
+              style={{
+                // 使用多重 mask 与 destination-out 将中间 Visualizer 的区域透明镂空
+                // 洞口尺寸：宽度224px(256px-左右16px)，高度152px(避开顶部Header与底部HUD)
+                WebkitMaskImage: `linear-gradient(black, black), linear-gradient(black, black)`,
+                WebkitMaskSize: `100% 100%, 224px 130px`,
+                WebkitMaskPosition: `0 0, 16px 46px`,
+                WebkitMaskRepeat: `no-repeat`,
+                WebkitMaskComposite: `destination-out`,
+                maskComposite: `exclude`
+              }}
+            />
+
+            {/* 2. 内容层：完全透明容器，负责安放原来的三个元素 */}
+            <div className="relative w-full h-full p-4 flex flex-col pointer-events-none">
+              
+              {/* Header: ROI Camera/Algorithm Info */}
+              <div className="flex items-center justify-between px-1 mb-3">
               <div className="flex items-center gap-2">
                  <div className={`w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_#ef4444]`} />
                  <span className="text-[10px] font-mono text-slate-500 tracking-wider">ROI_TRACKING_ACTIVE</span>
@@ -341,6 +360,8 @@ int main() {
                  <span>expoPower</span>
                  <span className="text-green-600">0.82 * P_MAX</span>
                </div>
+            </div>
+            {/* 内容层结束 */}
             </div>
           </div>
 
