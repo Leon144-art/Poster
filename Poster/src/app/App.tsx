@@ -168,7 +168,9 @@ export default function App() {
       marker: 'bg-slate-400',
       // 清透白玻璃卡片，边缘采用冷灰光
       panelBase: 'bg-white/60 border-white/80 shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-lg',
+      panelBase_line: 'bg-white/30 border-white/0 shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-lg',
       panelInner: 'bg-gradient-to-br from-white/90 to-white/40 border-white/60',
+      panelInner_line: 'bg-gradient-to-br from-white/90 to-white/40 border-white/60',
       panelText: 'text-slate-600',
       trailStroke: '#7dd3fc',
       trailGlow: 'rgba(125,211,252,0.18)',
@@ -282,7 +284,7 @@ int main() {
           */}
 
           {/* 新的 ROI HUD 视窗面板 */}
-          <div className={`absolute top-[12%] right-[8%] w-64 h-72 ${theme.panelBase || 'bg-gradient-to-br from-white/60 to-white/10 border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.04)]'} backdrop-blur-md border border-white/40 rounded-2xl p-4 flex flex-col transform rotate-2 pointer-events-auto`}>
+          <div className={`absolute top-[12%] right-[8%] w-64 h-72 ${theme.panelBase_line || 'bg-gradient-to-br from-white/60 to-white/10 border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.04)]'} backdrop-blur-md border border-white/40 rounded-2xl p-4 flex flex-col transform rotate-2 pointer-events-auto`}>
             {/* Header: ROI Camera/Algorithm Info */}
             <div className="flex items-center justify-between px-1 mb-3">
               <div className="flex items-center gap-2">
@@ -293,7 +295,7 @@ int main() {
             </div>
 
             {/* Main Visualizer Window */}
-            <div className={`relative w-full flex-1 ${theme.panelInner || 'bg-slate-900/5 border-slate-900/10'} rounded-xl border overflow-hidden`}>
+            <div className={`relative w-full flex-1 ${theme.panelInner_line || 'bg-slate-900/5 border-slate-900/10'} rounded-xl border overflow-hidden`}>
                {/* 模拟的四角对焦框 (Focus Brackets) */}
                <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-slate-400 opacity-70"></div>
                <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-slate-400 opacity-70"></div>
@@ -326,7 +328,7 @@ int main() {
             </div>
 
             {/* C++ Variables Readout HUD */}
-            <div className="mt-3 flex flex-col gap-1.5 bg-white/40 p-2 rounded-lg border border-white/50 backdrop-blur-sm">
+            <div className="mt-3 flex flex-col gap-1.5 bg-white/65 p-2 rounded-lg border border-white/50 backdrop-blur-md">
                <div className="flex justify-between items-center text-[9px] font-mono font-medium text-slate-600">
                  <span>cv::fitLine([dist=L2])</span>
                  <span className="text-blue-500">vy: 0.819, vx:-0.573</span>
