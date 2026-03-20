@@ -170,7 +170,7 @@ export default function App() {
       panelBase: 'bg-white/70 border-white/80 shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-lg',
       panelBase_line: 'bg-white/50 border-white/0 shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-sm',
       panelInner: 'bg-gradient-to-br from-white/90 to-white/40 border-white/60',
-      panelInner_line: 'bg-gradient-to-br from-white/30 to-white/30 border-white/60 ',
+      panelInner_line: 'bg-gradient-to-br from-white/35 to-white/35 border-white/60 ',
       panelText: 'text-slate-600',
       trailStroke: '#7dd3fc',
       trailGlow: 'rgba(125,211,252,0.18)',
@@ -284,7 +284,7 @@ int main() {
           */}
 
           {/* 新的 ROI HUD 视窗面板 */}
-          <div className="absolute top-[12%] right-[8%] w-64 h-72 transform rotate-2 pointer-events-auto">
+          <div className="absolute top-[13.5%] right-[8%] w-64 h-72 transform rotate-2 pointer-events-auto">
             
             {/* 1. 背景镂空层：负责提供模糊、渐变、以及外部圆角边框 */}
             <div 
@@ -328,7 +328,7 @@ int main() {
 
                {/* 核心视觉元素：拟合出的绿色数学直线, 模拟 cv::fitLine 结果 */}
                {/* 角度约需要和背景光带曲线那一块的切线一致 */}
-               <div className="absolute w-[150%] h-[2px] bg-green-500 shadow-[0_0_10px_#22c55e] left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-[-35deg]">
+               <div className="absolute w-[150%] h-[2px] bg-green-500 shadow-[0_0_10px_#22c55e] left-1/4 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-[35deg]">
                  {/* 直线上的采样点集 (Points) */}
                  <div className="absolute left-[30%] -top-1 w-1.5 h-1.5 bg-white border border-green-600 rounded-full"></div>
                  <div className="absolute left-[45%] top-[2px] w-1 h-1 bg-green-400 rounded-full"></div>
