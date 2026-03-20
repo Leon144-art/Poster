@@ -10,6 +10,12 @@ import { Settings, BarChart2, Cpu } from 'lucide-react';
 // 6 = 【新增】原图配色的浅色版 (清透白底 + 冰蓝色高光 + 透亮白玻璃质感卡片)
 const THEME_VARIANT = 6;
 
+// 切换轨迹 / ROI 视图：
+// 1 = 当前版本：中段下探后向右下延展
+// 2 = 更平缓的 S 型路线
+// 3 = 更激进的斜切路线
+const TRAIL_VARIANT = 1;
+
 export default function App() {
   const THEMES: Record<number, any> = {
     1: {
@@ -179,12 +185,76 @@ export default function App() {
   };
 
   const theme = THEMES[THEME_VARIANT];
-  const trailPath =
-    'M-48 200'+ 
-    'C62 150, 150 160, 232 176'+ 
-    'S360 214, 390 270'+ 
-    'S480 346, 465 468'+ 
-    'S438 690, 675 900';
+  const TRAILS: Record<number, any> = {
+    1: {
+      trailPath:
+        'M-48 200' +
+        'C62 150, 150 160, 232 176' +
+        'S360 214, 390 270' +
+        'S480 346, 465 468' +
+        'S438 690, 675 900',
+      lineAngle: 'rotate-[35deg]',
+      linePosition: 'left-1/4 top-1/2',
+      normalAngle: 'rotate-[55deg]',
+      normalPosition: 'left-1/2 top-1/2',
+      centerDotBorder: 'border-blue-500/80',
+      fitLineColor: 'bg-green-500',
+      fitLineGlow: 'shadow-[0_0_10px_#22c55e]',
+      fitLinePointMain: 'border-green-600',
+      fitLinePointMinor: 'bg-green-400',
+      normalLineColor: 'bg-red-400/80',
+      normalLineGlow: 'shadow-[0_0_5px_#f87171]',
+      normalArrowColor: 'border-l-red-400',
+      normalLabelColor: 'text-red-500',
+      powerReadoutColor: 'text-green-600',
+    },
+    2: {
+      trailPath:
+        'M-60 238' +
+        'C30 210, 140 170, 242 188' +
+        'S392 252, 402 334' +
+        'S394 484, 468 586' +
+        'S592 760, 642 860',
+      lineAngle: 'rotate-[18deg]',
+      linePosition: 'left-[34%] top-[48%]',
+      normalAngle: 'rotate-[108deg]',
+      normalPosition: 'left-[53%] top-[49%]',
+      centerDotBorder: 'border-cyan-500/80',
+      fitLineColor: 'bg-emerald-500',
+      fitLineGlow: 'shadow-[0_0_10px_#10b981]',
+      fitLinePointMain: 'border-emerald-600',
+      fitLinePointMinor: 'bg-emerald-400',
+      normalLineColor: 'bg-amber-400/80',
+      normalLineGlow: 'shadow-[0_0_5px_#fbbf24]',
+      normalArrowColor: 'border-l-amber-400',
+      normalLabelColor: 'text-amber-500',
+      powerReadoutColor: 'text-emerald-600',
+    },
+    3: {
+      trailPath:
+        'M-72 132' +
+        'C54 126, 154 164, 250 244' +
+        'S362 362, 404 438' +
+        'S474 548, 560 640' +
+        'S664 778, 720 914',
+      lineAngle: 'rotate-[52deg]',
+      linePosition: 'left-[18%] top-[54%]',
+      normalAngle: 'rotate-[142deg]',
+      normalPosition: 'left-[47%] top-[50%]',
+      centerDotBorder: 'border-sky-500/80',
+      fitLineColor: 'bg-lime-500',
+      fitLineGlow: 'shadow-[0_0_10px_#84cc16]',
+      fitLinePointMain: 'border-lime-600',
+      fitLinePointMinor: 'bg-lime-400',
+      normalLineColor: 'bg-rose-400/80',
+      normalLineGlow: 'shadow-[0_0_5px_#fb7185]',
+      normalArrowColor: 'border-l-rose-400',
+      normalLabelColor: 'text-rose-500',
+      powerReadoutColor: 'text-lime-600',
+    },
+  };
+  const trail = TRAILS[TRAIL_VARIANT] || TRAILS[1];
+  const trailPath = trail.trailPath;
 
   return (
     <div className={`min-h-screen ${theme.pageBg} flex items-center justify-center p-4 sm:p-8 font-sans overflow-hidden`}>
@@ -225,14 +295,14 @@ export default function App() {
 
             <path
               d={trailPath}
-              stroke={theme.trailDash || 'rgba(148,163,184,0.18)'}
+              stroke={trail.trailDash || theme.trailDash || 'rgba(148,163,184,0.18)'}
               strokeWidth="2"
               strokeDasharray="10 12"
               strokeLinecap="round"
             />
             <path
               d={trailPath}
-              stroke={theme.trailGlow || 'rgba(125,211,252,0.18)'}
+              stroke={trail.trailGlow || theme.trailGlow || 'rgba(125,211,252,0.18)'}
               strokeWidth="32"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -240,7 +310,7 @@ export default function App() {
             />
             <path
               d={trailPath}
-              stroke={theme.trailStroke || '#7dd3fc'}
+              stroke={trail.trailStroke || theme.trailStroke || '#7dd3fc'}
               strokeWidth="24"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -324,26 +394,26 @@ int main() {
                {/* 十字准星与中心原点 */}
                <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-300/40 border-dashed border-t border-slate-400/30"></div>
                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-slate-300/40 border-dashed border-l border-slate-400/30"></div>
-               <div className="absolute top-1/2 left-1/2 w-2 h-2 -ml-1 -mt-1 rounded-full border border-blue-500/80"></div>
+               <div className={`absolute top-1/2 left-1/2 w-2 h-2 -ml-1 -mt-1 rounded-full border ${trail.centerDotBorder}`}></div>
 
                {/* 核心视觉元素：拟合出的绿色数学直线, 模拟 cv::fitLine 结果 */}
                {/* 角度约需要和背景光带曲线那一块的切线一致 */}
-               <div className="absolute w-[150%] h-[2px] bg-green-500 shadow-[0_0_10px_#22c55e] left-1/4 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-[35deg]">
+               <div className={`absolute w-[150%] h-[2px] ${trail.fitLineColor} ${trail.fitLineGlow} ${trail.linePosition} transform -translate-x-1/2 -translate-y-1/2 ${trail.lineAngle}`}>
                  {/* 直线上的采样点集 (Points) */}
-                 <div className="absolute left-[30%] -top-1 w-1.5 h-1.5 bg-white border border-green-600 rounded-full"></div>
-                 <div className="absolute left-[45%] top-[2px] w-1 h-1 bg-green-400 rounded-full"></div>
-                 <div className="absolute left-[52%] -top-[3px] w-1.5 h-1.5 bg-white border border-green-600 rounded-full"></div>
-                 <div className="absolute left-[65%] top-[1px] w-1 h-1 bg-green-400 rounded-full"></div>
-                 <div className="absolute left-[78%] -top-[1.5px] w-1.5 h-1.5 bg-white border border-green-600 rounded-full"></div>
+                 <div className={`absolute left-[30%] -top-1 w-1.5 h-1.5 bg-white border ${trail.fitLinePointMain} rounded-full`}></div>
+                 <div className={`absolute left-[45%] top-[2px] w-1 h-1 ${trail.fitLinePointMinor} rounded-full`}></div>
+                 <div className={`absolute left-[52%] -top-[3px] w-1.5 h-1.5 bg-white border ${trail.fitLinePointMain} rounded-full`}></div>
+                 <div className={`absolute left-[65%] top-[1px] w-1 h-1 ${trail.fitLinePointMinor} rounded-full`}></div>
+                 <div className={`absolute left-[78%] -top-[1.5px] w-1.5 h-1.5 bg-white border ${trail.fitLinePointMain} rounded-full`}></div>
                </div>
 
                {/* 法向量指出 tilt/error (绿色直线垂线) */}
-               <div className="absolute left-1/2 top-1/2 w-[40px] h-[1px] bg-red-400/80 shadow-[0_0_5px_#f87171] transform origin-left rotate-[55deg]">
+               <div className={`absolute w-[40px] h-[1px] ${trail.normalLineColor} ${trail.normalLineGlow} ${trail.normalPosition} transform origin-left ${trail.normalAngle}`}>
                  {/* 法向量终点 */}
-                 <div className="absolute right-0 -top-1 w-0 h-0 border-t-[3px] border-b-[3px] border-l-[5px] border-transparent border-l-red-400"></div>
+                 <div className={`absolute right-0 -top-1 w-0 h-0 border-t-[3px] border-b-[3px] border-l-[5px] border-transparent ${trail.normalArrowColor}`}></div>
                </div>
                {/* 注释法向量含义 */}
-               <span className="absolute top-[60%] left-[55%] text-[8px] font-mono text-red-500 pointer-events-none">normError</span>
+               <span className={`absolute top-[60%] left-[55%] text-[8px] font-mono ${trail.normalLabelColor} pointer-events-none`}>normError</span>
             </div>
 
             {/* C++ Variables Readout HUD */}
@@ -358,7 +428,7 @@ int main() {
                </div>
                <div className="flex justify-between items-center text-[9px] font-mono font-medium text-slate-600">
                  <span>expoPower</span>
-                 <span className="text-green-600">0.82 * P_MAX</span>
+                 <span className={trail.powerReadoutColor}>0.82 * P_MAX</span>
                </div>
             </div>
             {/* 内容层结束 */}
