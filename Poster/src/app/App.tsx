@@ -14,7 +14,8 @@ const THEME_VARIANT = 6;
 // 1 = 当前版本：中段下探后向右下延展
 // 2 = 更平缓的 S 型路线
 // 3 = 更激进的斜切路线
-const TRAIL_VARIANT = 1;
+// 4 = 右下起步，先垂直上行，再圆角转为水平左移 (已优化直角平滑弧度并修复坐标)
+const TRAIL_VARIANT = 4;
 
 export default function App() {
   const THEMES: Record<number, any> = {
@@ -251,6 +252,28 @@ export default function App() {
       normalArrowColor: 'border-l-rose-400',
       normalLabelColor: 'text-rose-500',
       powerReadoutColor: 'text-lime-600',
+    },
+    4: {
+      trailPath:
+        'M 460 900 ' +          // 从右下角出发（x=460靠近中心偏右，y=900在屏幕外）
+        'L 460 320 ' +          // 笔直向上直到 y=320
+        'Q 460 200, 340 200 ' + // 使用二次贝塞尔曲线做90度平滑转角（半径120）
+        'L -50 200',            // 水平向左直接穿出画面屏幕 (原左上起点是y=200附近)
+      lineAngle: 'rotate-[-45deg]', // 配合圆角弯道的切线角度
+      linePosition: 'left-1/2 top-1/2', 
+      normalAngle: 'rotate-[45deg]',
+      normalPosition: 'left-[55%] top-[45%]',
+      centerDotBorder: 'border-blue-500/80',
+      fitLineColor: 'bg-green-500',
+      fitLineGlow: 'shadow-[0_0_10px_#22c55e]',
+      fitLinePointMain: 'border-green-600',
+      fitLinePointMinor: 'bg-green-400',
+      normalLineColor: 'bg-red-400/80',
+      normalLineGlow: 'shadow-[0_0_5px_#f87171]',
+      normalArrowColor: 'border-l-red-400',
+      normalLabelColor: 'text-red-500',
+      powerReadoutColor: 'text-green-600',
+      // 取消原本单独覆盖的 trail 相关配置，让它回退/共享原主题或1的一致效果
     },
   };
   const trail = TRAILS[TRAIL_VARIANT] || TRAILS[1];
