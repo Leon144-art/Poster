@@ -178,11 +178,11 @@ export default function App() {
 
   const theme = THEMES[THEME_VARIANT];
   const trailPath =
-    'M-48 178'+ 
-    'C62 150, 150 125, 232 176'+ 
-    'S360 214, 430 234'+ 
-    'S456 346, 472 468'+ 
-    'S438 690, 640 900';
+    'M-48 200'+ 
+    'C62 150, 150 160, 232 176'+ 
+    'S360 214, 390 270'+ 
+    'S480 346, 465 468'+ 
+    'S438 690, 675 900';
 
   return (
     <div className={`min-h-screen ${theme.pageBg} flex items-center justify-center p-4 sm:p-8 font-sans overflow-hidden`}>
@@ -239,7 +239,7 @@ export default function App() {
             <path
               d={trailPath}
               stroke={theme.trailStroke || '#7dd3fc'}
-              strokeWidth="20"
+              strokeWidth="24"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -249,6 +249,7 @@ export default function App() {
         {/* 3. Defocused Frosted Glass UI Panels */}
         <div className="absolute inset-0 z-10 pointer-events-none">
           {/* Panel 1: Top Right */}
+          {/* 旧的代码面板已注释
           <div className={`absolute top-[14%] right-[6%] w-48 h-56 ${theme.panelBase || 'bg-gradient-to-br from-white/70 to-white/20 border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.04)]'} backdrop-blur-md border rounded-2xl blur-[1px] p-4 flex flex-col gap-3 transform rotate-3`}>
   <div className="flex items-center justify-between px-1">
     <div className="flex gap-2 items-center">
@@ -265,19 +266,81 @@ export default function App() {
       <div className="w-2 h-2 rounded-full bg-slate-300" />
     </div>
     <pre className={`text-[9px] leading-[1.35] font-mono whitespace-pre-wrap ${theme.panelText || 'text-slate-300'} select-none`}>
-{`#include <opencv2/opencv.hpp>
+{\`#include <opencv2/opencv.hpp>
 
 int main() {
   cv::Mat img = cv::imread("input.jpg");
   cv::GaussianBlur(img, img, cv::Size(9, 9), 0);
   cv::imshow("demo", img);
   cv::waitKey(0);
-}`}</pre>
+}\`}</pre>
   </div>
 
   <div className={`w-4/5 h-1.5 ${theme.lineStrong} rounded-full mt-1`} />
   <div className={`w-1/2 h-1.5 ${theme.lineStrong} rounded-full`} />
 </div>
+          */}
+
+          {/* 新的 ROI HUD 视窗面板 */}
+          <div className={`absolute top-[12%] right-[8%] w-64 h-72 ${theme.panelBase || 'bg-gradient-to-br from-white/60 to-white/10 border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.04)]'} backdrop-blur-md border border-white/40 rounded-2xl p-4 flex flex-col transform rotate-2 pointer-events-auto`}>
+            {/* Header: ROI Camera/Algorithm Info */}
+            <div className="flex items-center justify-between px-1 mb-3">
+              <div className="flex items-center gap-2">
+                 <div className={`w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_#ef4444]`} />
+                 <span className="text-[10px] font-mono text-slate-500 tracking-wider">ROI_TRACKING_ACTIVE</span>
+              </div>
+              <Settings className="w-3.5 h-3.5 text-slate-400" />
+            </div>
+
+            {/* Main Visualizer Window */}
+            <div className={`relative w-full flex-1 ${theme.panelInner || 'bg-slate-900/5 border-slate-900/10'} rounded-xl border overflow-hidden`}>
+               {/* 模拟的四角对焦框 (Focus Brackets) */}
+               <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-slate-400 opacity-70"></div>
+               <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-slate-400 opacity-70"></div>
+               <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-slate-400 opacity-70"></div>
+               <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-slate-400 opacity-70"></div>
+
+               {/* 十字准星与中心原点 */}
+               <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-300/40 border-dashed border-t border-slate-400/30"></div>
+               <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-slate-300/40 border-dashed border-l border-slate-400/30"></div>
+               <div className="absolute top-1/2 left-1/2 w-2 h-2 -ml-1 -mt-1 rounded-full border border-blue-500/80"></div>
+
+               {/* 核心视觉元素：拟合出的绿色数学直线, 模拟 cv::fitLine 结果 */}
+               {/* 角度约需要和背景光带曲线那一块的切线一致 */}
+               <div className="absolute w-[150%] h-[2px] bg-green-500 shadow-[0_0_10px_#22c55e] left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-[-35deg]">
+                 {/* 直线上的采样点集 (Points) */}
+                 <div className="absolute left-[30%] -top-1 w-1.5 h-1.5 bg-white border border-green-600 rounded-full"></div>
+                 <div className="absolute left-[45%] top-[2px] w-1 h-1 bg-green-400 rounded-full"></div>
+                 <div className="absolute left-[52%] -top-[3px] w-1.5 h-1.5 bg-white border border-green-600 rounded-full"></div>
+                 <div className="absolute left-[65%] top-[1px] w-1 h-1 bg-green-400 rounded-full"></div>
+                 <div className="absolute left-[78%] -top-[1.5px] w-1.5 h-1.5 bg-white border border-green-600 rounded-full"></div>
+               </div>
+
+               {/* 法向量指出 tilt/error (绿色直线垂线) */}
+               <div className="absolute left-1/2 top-1/2 w-[40px] h-[1px] bg-red-400/80 shadow-[0_0_5px_#f87171] transform origin-left rotate-[55deg]">
+                 {/* 法向量终点 */}
+                 <div className="absolute right-0 -top-1 w-0 h-0 border-t-[3px] border-b-[3px] border-l-[5px] border-transparent border-l-red-400"></div>
+               </div>
+               {/* 注释法向量含义 */}
+               <span className="absolute top-[60%] left-[55%] text-[8px] font-mono text-red-500 pointer-events-none">normError</span>
+            </div>
+
+            {/* C++ Variables Readout HUD */}
+            <div className="mt-3 flex flex-col gap-1.5 bg-white/40 p-2 rounded-lg border border-white/50 backdrop-blur-sm">
+               <div className="flex justify-between items-center text-[9px] font-mono font-medium text-slate-600">
+                 <span>cv::fitLine([dist=L2])</span>
+                 <span className="text-blue-500">vy: 0.819, vx:-0.573</span>
+               </div>
+               <div className="flex justify-between items-center text-[9px] font-mono font-medium text-slate-600">
+                 <span>emaTilt.deg</span>
+                 <span className="text-amber-600 font-bold">-35.15°</span>
+               </div>
+               <div className="flex justify-between items-center text-[9px] font-mono font-medium text-slate-600">
+                 <span>expoPower</span>
+                 <span className="text-green-600">0.82 * P_MAX</span>
+               </div>
+            </div>
+          </div>
 
           {/* Panel 2: Bottom Left */}
           <div className={`absolute bottom-[20%] left-[5%] w-56 h-36 ${theme.panelBase || 'bg-gradient-to-tr from-white/80 to-white/30 border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.05)]'} backdrop-blur-lg border rounded-2xl blur-[2.5px] p-4 flex flex-col gap-4 transform -rotate-2`}>
