@@ -16,6 +16,7 @@ const THEME_VARIANT = 6;
 // 3 = 更激进的斜切路线
 // 4 = 右下起步，先垂直上行，再圆角转为水平左移 (已优化直角平滑弧度并修复坐标)
 const TRAIL_VARIANT = 4;
+const SHOW_TRAIL_ARROWS = true;
 
 export default function App() {
   const THEMES: Record<number, any> = {
@@ -374,30 +375,34 @@ export default function App() {
 
             {/* 起点和终点近处的箭头，使用真正的图标符号 (SVG unicode) 来避免变形，并通过样式控制排布 */}
             {/* 使用标准的无衬线加粗角括号 '〉' 进行旋转替代或标准箭头 ➤，此处选用 〉 效果最类似真实 UI 箭头 */}
-            <text
-              fill="rgba(255,255,255,0.75)" // 稍微调低透明度让它融入光晕
-              fontSize={trail.arrowFontSize || 16}
-              className="font-bold translate-y-[-2px]" // 使用微调位移修正系统字体引起的光学视觉中心偏差
-              fontFamily="system-ui, -apple-system, sans-serif"
-              letterSpacing={trail.arrowLetterSpacing || 8}
-              dy="-1" // SVG 级别的 Y轴偏移微调
-            >
-              <textPath href="#trail-guide-path" startOffset={trail.arrowStartOffset || '8%'} dominantBaseline="central">
-                〉〉〉
-              </textPath>
-            </text>
-            <text
-              fill="rgba(255,255,255,0.75)"
-              fontSize={trail.arrowFontSize || 16}
-              className="font-bold translate-y-[-2px]" 
-              fontFamily="system-ui, -apple-system, sans-serif"
-              letterSpacing={trail.arrowLetterSpacing || 8}
-              dy="-1.9"
-            >
-              <textPath href="#trail-guide-path" startOffset={trail.arrowEndOffset || '88%'} dominantBaseline="central">
-                〉〉〉
-              </textPath>
-            </text>
+            {SHOW_TRAIL_ARROWS && (
+              <>
+                <text
+                  fill="rgba(255,255,255,0.75)" // 稍微调低透明度让它融入光晕
+                  fontSize={trail.arrowFontSize || 16}
+                  className="font-bold translate-y-[-2px]" // 使用微调位移修正系统字体引起的光学视觉中心偏差
+                  fontFamily="system-ui, -apple-system, sans-serif"
+                  letterSpacing={trail.arrowLetterSpacing || 8}
+                  dy="-1" // SVG 级别的 Y轴偏移微调
+                >
+                  <textPath href="#trail-guide-path" startOffset={trail.arrowStartOffset || '8%'} dominantBaseline="central">
+                    〉〉〉
+                  </textPath>
+                </text>
+                <text
+                  fill="rgba(255,255,255,0.75)"
+                  fontSize={trail.arrowFontSize || 16}
+                  className="font-bold translate-y-[-2px]" 
+                  fontFamily="system-ui, -apple-system, sans-serif"
+                  letterSpacing={trail.arrowLetterSpacing || 8}
+                  dy="-1.9"
+                >
+                  <textPath href="#trail-guide-path" startOffset={trail.arrowEndOffset || '88%'} dominantBaseline="central">
+                    〉〉〉
+                  </textPath>
+                </text>
+              </>
+            )}
           </svg>
         </div>
 
