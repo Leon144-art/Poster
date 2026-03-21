@@ -377,24 +377,23 @@ export default function App() {
             <text
               fill="rgba(255,255,255,0.75)" // 稍微调低透明度让它融入光晕
               fontSize={trail.arrowFontSize || 16}
-              className="font-bold translate-y-[-2px]" // 使用微调位移修正系统字体引起的光学视觉中心偏差
+              className="font-bold -translate-y-1" // 使用 tailwind 使其垂直居中于蓝色轨道
               fontFamily="system-ui, -apple-system, sans-serif"
               letterSpacing={trail.arrowLetterSpacing || 8}
-              dy="-1" // SVG 级别的 Y轴偏移微调
             >
-              <textPath href="#trail-guide-path" startOffset={trail.arrowStartOffset || '8%'} dominantBaseline="central">
+              <textPath href="#trail-guide-path" startOffset={trail.arrowStartOffset || '8%'} dominantBaseline="middle"  >
                 〉〉〉
+                
               </textPath>
             </text>
             <text
               fill="rgba(255,255,255,0.75)"
               fontSize={trail.arrowFontSize || 16}
-              className="font-bold translate-y-[-2px]" 
+              className="font-bold -translate-y-1"
               fontFamily="system-ui, -apple-system, sans-serif"
               letterSpacing={trail.arrowLetterSpacing || 8}
-              dy="-1.9"
             >
-              <textPath href="#trail-guide-path" startOffset={trail.arrowEndOffset || '88%'} dominantBaseline="central">
+              <textPath href="#trail-guide-path" startOffset={trail.arrowEndOffset || '88%'} dominantBaseline="middle">
                 〉〉〉
               </textPath>
             </text>
@@ -599,7 +598,10 @@ int main() {
           </div>
 
           {/* Footer Grid */}
-          <div className="grid grid-cols-3 gap-4 items-end border-t-[1.5px] ${theme.linedivider} pt-6">
+          <div className="relative grid grid-cols-3 gap-4 items-end pt-8">
+            {/* Thick Semi-transparent Blurred Div with Gradient */}
+            <div className="absolute top-0 left-[-5px] w-[65%] h-2 rounded-md bg-gradient-to-r from-slate-500/40 via-slate-500/10 to-transparent backdrop-blur-md" />
+            
             <div className="col-span-1">
               <p className={`text-[13px] sm:text-[15px] font-bold tracking-[0.2em] ${theme.mutedStrong} uppercase mb-2`}>
                 Group Members
