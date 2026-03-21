@@ -174,10 +174,10 @@ export default function App() {
       // linedivider: 'bg-slate-300/100',
       marker: 'bg-slate-400',
       // 清透白玻璃卡片，边缘采用冷灰光
-      panelBase: 'bg-white/70 border-white/80 shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-lg',
-      panelBase_line: 'bg-white/50 border-white/0 shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-sm',
+      panelBase: 'bg-white/70 border-white/80 shadow-[0_8px_32px_rgba(15,23,42,0.1)] backdrop-blur-lg',
+      panelBase_line: 'bg-white/30 border-white/0 shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-sm',
       panelInner: 'bg-gradient-to-br from-white/90 to-white/40 border-white/60',
-      panelInner_line: 'bg-gradient-to-br from-white/35 to-white/35 border-white/60 ',
+      panelInner_line: 'bg-gradient-to-br from-white/40 to-white/25 border-white/60 ',
       panelText: 'text-slate-600',
       trailStroke: '#7dd3fc',
       trailGlow: 'rgba(125,211,252,0.18)',
@@ -208,6 +208,9 @@ export default function App() {
       normalArrowColor: 'border-l-red-400',
       normalLabelColor: 'text-red-500',
       powerReadoutColor: 'text-green-600',
+      dashWidth: 2,
+      glowWidth: 32,
+      strokeWidth: 24,
     },
     2: {
       trailPath:
@@ -230,6 +233,9 @@ export default function App() {
       normalArrowColor: 'border-l-amber-400',
       normalLabelColor: 'text-amber-500',
       powerReadoutColor: 'text-emerald-600',
+      dashWidth: 2,
+      glowWidth: 28,
+      strokeWidth: 20,
     },
     3: {
       trailPath:
@@ -252,6 +258,9 @@ export default function App() {
       normalArrowColor: 'border-l-rose-400',
       normalLabelColor: 'text-rose-500',
       powerReadoutColor: 'text-lime-600',
+      dashWidth: 2,
+      glowWidth: 34,
+      strokeWidth: 26,
     },
     4: {
       trailPath:
@@ -274,6 +283,9 @@ export default function App() {
       normalLabelColor: 'text-red-500',
       powerReadoutColor: 'text-green-600',
       // 取消原本单独覆盖的 trail 相关配置，让它回退/共享原主题或1的一致效果
+      dashWidth: 2,
+      glowWidth: 26,
+      strokeWidth: 27,
     },
   };
   const trail = TRAILS[TRAIL_VARIANT] || TRAILS[1];
@@ -319,14 +331,14 @@ export default function App() {
             <path
               d={trailPath}
               stroke={trail.trailDash || theme.trailDash || 'rgba(148,163,184,0.18)'}
-              strokeWidth="2"
+              strokeWidth={trail.dashWidth || 2}
               strokeDasharray="10 12"
               strokeLinecap="round"
             />
             <path
               d={trailPath}
               stroke={trail.trailGlow || theme.trailGlow || 'rgba(125,211,252,0.18)'}
-              strokeWidth="32"
+              strokeWidth={trail.glowWidth || 32}
               strokeLinecap="round"
               strokeLinejoin="round"
               filter="url(#path-glow)"
@@ -334,7 +346,7 @@ export default function App() {
             <path
               d={trailPath}
               stroke={trail.trailStroke || theme.trailStroke || '#7dd3fc'}
-              strokeWidth="24"
+              strokeWidth={trail.strokeWidth || 24}
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -378,6 +390,8 @@ int main() {
 
           {/* 新的 ROI HUD 视窗面板 */}
           <div className="absolute top-[13.5%] right-[8%] w-64 h-72 transform rotate-2 pointer-events-auto">
+            {/* 0. 纯阴影层：只负责大卡片外轮廓的悬浮感 */}
+            <div className="absolute inset-0 rounded-2xl shadow-[0_18px_44px_rgba(15,23,42,0.18)] pointer-events-none" />
             
             {/* 1. 背景镂空层：负责提供模糊、渐变、以及外部圆角边框 */}
             <div 
@@ -386,8 +400,8 @@ int main() {
                 // 使用多重 mask 与 destination-out 将中间 Visualizer 的区域透明镂空
                 // 洞口尺寸：宽度224px(256px-左右16px)，高度152px(避开顶部Header与底部HUD)
                 WebkitMaskImage: `linear-gradient(black, black), linear-gradient(black, black)`,
-                WebkitMaskSize: `100% 100%, 224px 130px`,
-                WebkitMaskPosition: `0 0, 16px 46px`,
+                WebkitMaskSize: `100% 100%, 224px 132px`, // <--- 修改 152px（调整洞口高度）
+                WebkitMaskPosition: `0 0, 16px 43px`, // <--- 修改 46px（调整洞口上边距偏置）
                 WebkitMaskRepeat: `no-repeat`,
                 WebkitMaskComposite: `destination-out`,
                 maskComposite: `exclude`
