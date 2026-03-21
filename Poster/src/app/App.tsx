@@ -599,7 +599,9 @@ int main() {
           </div>
 
           {/* Footer Grid */}
-          <div className="grid grid-cols-3 gap-4 items-end border-t-[1.5px] ${theme.linedivider} pt-6">
+          <div className="relative grid grid-cols-3 gap-4 items-end pt-8">
+            <div className="absolute top-[8px] left-[-7px] h-2.5 w-[68%] rounded-full bg-[linear-gradient(to_right,rgba(100,116,139,0.28)_0%,rgba(100,116,139,0.22)_16%,rgba(100,116,139,0.20)_34%,rgba(100,116,139,0.13)_58%,rgba(100,116,139,0.07)_75%,rgba(100,116,139,0.0)_100%)] blur-[2px]" />
+            <div className="absolute top-[9px] left-[-5px] h-2 w-[65%] rounded-md bg-[linear-gradient(to_right,rgba(100,116,139,0.44)_0%,rgba(100,116,139,0.36)_10%,rgba(100,116,139,0.26)_24%,rgba(100,116,139,0.20)_44%,rgba(100,116,139,0.03)_68%,rgba(100,116,139,0.00)_100%)] backdrop-blur-md" />
             <div className="col-span-1">
               <p className={`text-[13px] sm:text-[15px] font-bold tracking-[0.2em] ${theme.mutedStrong} uppercase mb-2`}>
                 Group Members
