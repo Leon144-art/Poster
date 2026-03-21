@@ -559,7 +559,7 @@ int main() {
           </div>
 
           {/* Panel 2: Bottom Left */}
-          <div className={`absolute bottom-[20%] left-[5%] w-56 h-36 ${theme.panelBase || 'bg-gradient-to-tr from-white/80 to-white/30 border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.05)]'} backdrop-blur-lg border rounded-2xl blur-[2.5px] p-4 flex flex-col gap-4 transform -rotate-2`}>
+          <div className={`absolute bottom-[23%] left-[5%] w-56 h-36 ${theme.panelBase || 'bg-gradient-to-tr from-white/80 to-white/30 border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.05)]'} backdrop-blur-lg border rounded-2xl blur-[2.5px] p-4 flex flex-col gap-4 transform -rotate-2`}>
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-full ${theme.panelInner || 'bg-gradient-to-tr from-white to-white border-white/90'} border shadow-sm flex items-center justify-center`}>
                  <Cpu className={`w-5 h-5 ${theme.accent}`} />
@@ -578,7 +578,7 @@ int main() {
           </div>
 
           {/* Panel 3: Mid Left (partially clipped) */}
-          <div className={`absolute top-[42%] -left-8 w-32 h-44 ${theme.panelBase || 'bg-white/40 border-white/60 shadow-sm'} backdrop-blur-sm border rounded-3xl blur-[3.5px] p-3 flex flex-col gap-2 transform -rotate-6`}>
+          <div className={`absolute top-[39%] -left-8 w-32 h-44 ${theme.panelBase || 'bg-white/40 border-white/60 shadow-sm'} backdrop-blur-sm border rounded-3xl blur-[3.5px] p-3 flex flex-col gap-2 transform -rotate-6`}>
             <div className={`w-full h-1/2 ${theme.panelInner || 'bg-white/50 border-white/60'} rounded-xl border`} />
             <div className={`w-full h-1.5 ${theme.lineSoft} rounded-full mt-2`} />
             <div className={`w-5/6 h-1.5 ${theme.lineSoft} rounded-full`} />
