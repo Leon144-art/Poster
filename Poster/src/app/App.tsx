@@ -281,10 +281,10 @@ export default function App() {
         'L 460 320 ' +          // 笔直向上直到 y=320
         'Q 460 200, 340 200 ' + // 使用二次贝塞尔曲线做90度平滑转角（半径120）
         'L -50 200',            // 水平向左直接穿出画面屏幕 (原左上起点是y=200附近)
-      lineAngle: 'rotate-[-45deg]', // 配合圆角弯道的切线角度
-      linePosition: 'left-1/2 top-1/2', 
-      normalAngle: 'rotate-[45deg]',
-      normalPosition: 'left-[55%] top-[45%]',
+      lineAngle: 'rotate-[29.68deg]', // y = 0.570x + 13.901 对应的图像坐标系角度
+      linePosition: 'left-[50%] top-[70%]', // 取 x=250 时的中点，y≈156.4，再按 500 宽基准等比映射
+      normalAngle: 'rotate-[119.68deg]', // 与绿线垂直的法向量方向
+      normalPosition: 'left-[50%] top-[70%]',
       centerDotBorder: 'border-blue-500/80',
       fitLineColor: 'bg-green-500',
       fitLineGlow: 'shadow-[0_0_10px_#22c55e]',
@@ -299,14 +299,68 @@ export default function App() {
       dashWidth: 2,
       glowWidth: 26,
       strokeWidth: 27,
-      arrowStartOffset: '8%',
+      arrowStartOffset: '28%',
       arrowEndOffset: '88%',
-      arrowFontSize: 20,
+      arrowFontSize: 23,
       arrowLetterSpacing: 4,
     },
   };
   const trail = TRAILS[TRAIL_VARIANT] || TRAILS[1];
   const trailPath = trail.trailPath;
+  const trailGuideRef = React.useRef<SVGPathElement | null>(null);
+  const [trailArrowTransforms, setTrailArrowTransforms] = React.useState<{ start: string[]; end: string[] }>({
+    start: [],
+    end: [],
+  });
+
+  React.useLayoutEffect(() => {
+    if (!SHOW_TRAIL_ARROWS || !trailGuideRef.current) {
+      setTrailArrowTransforms({ start: [], end: [] });
+      return;
+    }
+
+    const path = trailGuideRef.current;
+    const totalLength = path.getTotalLength();
+    const arrowSize = trail.arrowFontSize || 18;
+    const arrowGap = (trail.arrowLetterSpacing || 8) + arrowSize * 0.75;
+    const scale = arrowSize / 1024;
+
+    const parseOffset = (offset: string | number | undefined, fallbackRatio: number) => {
+      if (typeof offset === 'number') return Math.max(0, Math.min(totalLength, offset));
+      if (typeof offset === 'string' && offset.trim().endsWith('%')) {
+        const ratio = Number.parseFloat(offset);
+        if (Number.isFinite(ratio)) {
+          return (Math.max(0, Math.min(100, ratio)) / 100) * totalLength;
+        }
+      }
+      return fallbackRatio * totalLength;
+    };
+
+    const buildTransforms = (baseLength: number) => {
+      return [0, 1, 2].map((index) => {
+        const currentLength = Math.max(0, Math.min(totalLength, baseLength + index * arrowGap));
+        const sampleAhead = Math.min(totalLength, currentLength + 1);
+        const sampleBehind = Math.max(0, currentLength - 1);
+        const point = path.getPointAtLength(currentLength);
+        const ahead = path.getPointAtLength(sampleAhead);
+        const behind = path.getPointAtLength(sampleBehind);
+        const angle = (Math.atan2(ahead.y - behind.y, ahead.x - behind.x) * 180) / Math.PI;
+
+        return `translate(${point.x} ${point.y}) rotate(${angle}) scale(${scale}) translate(-512 -512)`;
+      });
+    };
+
+    setTrailArrowTransforms({
+      start: buildTransforms(parseOffset(trail.arrowStartOffset, 0.08)),
+      end: buildTransforms(parseOffset(trail.arrowEndOffset, 0.88)),
+    });
+  }, [
+    trailPath,
+    trail.arrowStartOffset,
+    trail.arrowEndOffset,
+    trail.arrowFontSize,
+    trail.arrowLetterSpacing,
+  ]);
 
   return (
     <div className={`min-h-screen ${theme.pageBg} flex items-center justify-center p-4 sm:p-8 font-sans overflow-hidden`}>
@@ -340,13 +394,11 @@ export default function App() {
             aria-hidden="true"
           >
             <defs>
-              <path id="trail-guide-path" d={trailPath} />
               <filter id="path-glow" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="28" />
               </filter>
-              {/* 正规的 SVG 箭头图标，替换原本的字符 ^^^ */}
-              <g id="trail-arrow" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none">
-                <path d="M-8,6 L0,0 L8,6" />
+              <g id="trail-arrow-icon" fill="rgba(255,255,255,0.75)">
+                <path d="M728.223744 520.22784a42.467328 42.467328 0 0 1-11.393024 20.503552L374.90688 882.65728c-16.662528 16.662528-43.677696 16.662528-60.340224 0s-16.662528-43.677696 0-60.340224L626.449408 510.43328 314.614784 198.598656c-16.662528-16.662528-16.662528-43.677696 0-60.340224 16.661504-16.662528 43.676672-16.662528 60.3392 0L716.879872 480.18432c10.860544 10.860544 14.642176 26.120192 11.343872 40.04352z" />
               </g>
             </defs>
 
@@ -366,6 +418,7 @@ export default function App() {
               filter="url(#path-glow)"
             />
             <path
+              ref={trailGuideRef}
               d={trailPath}
               stroke={trail.trailStroke || theme.trailStroke || '#7dd3fc'}
               strokeWidth={trail.strokeWidth || 24}
@@ -373,34 +426,14 @@ export default function App() {
               strokeLinejoin="round"
             />
 
-            {/* 起点和终点近处的箭头，使用真正的图标符号 (SVG unicode) 来避免变形，并通过样式控制排布 */}
-            {/* 使用标准的无衬线加粗角括号 '〉' 进行旋转替代或标准箭头 ➤，此处选用 〉 效果最类似真实 UI 箭头 */}
             {SHOW_TRAIL_ARROWS && (
               <>
-                <text
-                  fill="rgba(255,255,255,0.75)" // 稍微调低透明度让它融入光晕
-                  fontSize={trail.arrowFontSize || 16}
-                  className="font-bold translate-y-[-2px]" // 使用微调位移修正系统字体引起的光学视觉中心偏差
-                  fontFamily="system-ui, -apple-system, sans-serif"
-                  letterSpacing={trail.arrowLetterSpacing || 8}
-                  dy="-1" // SVG 级别的 Y轴偏移微调
-                >
-                  <textPath href="#trail-guide-path" startOffset={trail.arrowStartOffset || '8%'} dominantBaseline="central">
-                    〉〉〉
-                  </textPath>
-                </text>
-                <text
-                  fill="rgba(255,255,255,0.75)"
-                  fontSize={trail.arrowFontSize || 16}
-                  className="font-bold translate-y-[-2px]" 
-                  fontFamily="system-ui, -apple-system, sans-serif"
-                  letterSpacing={trail.arrowLetterSpacing || 8}
-                  dy="-1.9"
-                >
-                  <textPath href="#trail-guide-path" startOffset={trail.arrowEndOffset || '88%'} dominantBaseline="central">
-                    〉〉〉
-                  </textPath>
-                </text>
+                {trailArrowTransforms.start.map((transform, index) => (
+                  <use key={`trail-arrow-start-${index}`} href="#trail-arrow-icon" transform={transform} />
+                ))}
+                {trailArrowTransforms.end.map((transform, index) => (
+                  <use key={`trail-arrow-end-${index}`} href="#trail-arrow-icon" transform={transform} />
+                ))}
               </>
             )}
           </svg>
