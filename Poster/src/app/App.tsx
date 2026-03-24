@@ -17,7 +17,7 @@ const THEME_VARIANT = 6;
 // 4 = 右下起步，先垂直上行，再圆角转为水平左移 (已优化直角平滑弧度并修复坐标)
 const TRAIL_VARIANT = 4;
 const SHOW_TRAIL_ARROWS = true;
-const SHOW_VEHICLE_IMAGE = false;
+const SHOW_VEHICLE_IMAGE = true;
 
 export default function App() {
   const THEMES: Record<number, any> = {
@@ -300,7 +300,7 @@ export default function App() {
       dashWidth: 2,
       glowWidth: 26,
       strokeWidth: 27,
-      arrowStartOffset: '28%',
+      arrowStartOffset: '35%',
       arrowEndOffset: '88%',
       arrowFontSize: 23,
       arrowLetterSpacing: 4,
@@ -658,12 +658,12 @@ int main() {
           {/* Center Product Display Marker (Subtle) */}
           <div className="flex-1 w-full flex items-end justify-end relative my-8 pointer-events-none z-20">
              {SHOW_VEHICLE_IMAGE && (
-               <div className="absolute -right-[5%] -bottom-[10%] w-[45%] max-w-[400px] flex items-center justify-center">
+               <div className="absolute -right-[5.1%] -bottom-[31%] w-[47%] max-w-[400px] flex items-center justify-center">
                   {/* Vehicle Image */}
                   <img 
-                    src="/src/assets/test1.png" 
+                    src="/src/assets/test3.png" 
                     alt="Nighwan Vehicle" 
-                    className="w-full h-auto object-contain drop-shadow-2xl transform rotate-3"
+                    className="w-full h-auto object-contain drop-shadow-2xl transform rotate-[0.5deg]"
                     style={{ filter: 'drop-shadow(0 25px 25px rgba(0,0,0,0.3))' }}
                   />
                </div>
