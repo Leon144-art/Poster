@@ -614,25 +614,45 @@ int main() {
             </div>
           </div>
 
+          {/* Floating System Specifications Text */}
+          <div className="absolute left-[5%] top-[45%] flex flex-col gap-2 pointer-events-auto z-30">
+            <p className={`text-[11px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-2 border-b border-slate-400/30 pb-2 inline-block`}>
+              System Specifications
+            </p>
+            <div className="grid grid-cols-[80px_1fr] gap-x-4 gap-y-1.5 text-[10px] sm:text-[11px] font-mono">
+              <span className={`${theme.mutedSoft} font-semibold`}>SOFTWARE</span>
+              <span className={`${theme.mutedStrong}`}>C++ / OpenCV</span>
+              
+              <span className={`${theme.mutedSoft} font-semibold`}>HOST</span>
+              <span className={`${theme.mutedStrong}`}>Raspberry Pi</span>
+              
+              <span className={`${theme.mutedSoft} font-semibold`}>VISION</span>
+              <span className={`${theme.mutedStrong}`}>Camera Module 3</span>
+              
+              <span className={`${theme.mutedSoft} font-semibold`}>MOTION</span>
+              <span className={`${theme.mutedStrong}`}>1-DOF SG90</span>
+              
+              <span className={`${theme.mutedSoft} font-semibold`}>COMMS</span>
+              <span className={`${theme.mutedStrong}`}>UART Driver Board</span>
+              
+              <span className={`${theme.mutedSoft} font-semibold`}>CHASSIS</span>
+              <span className={`${theme.mutedStrong}`}>4WD Differential</span>
+              
+              <span className={`${theme.mutedSoft} font-semibold`}>POWER</span>
+              <span className={`${theme.mutedStrong}`}>18650 × 2</span>
+            </div>
+          </div>
+
           {/* Center Product Display Marker (Subtle) */}
-          <div className="flex-1 w-full flex items-center justify-center relative my-8">
-             <div className="relative w-[80%] max-w-[320px] aspect-square flex items-center justify-center opacity-[0.25]">
-                {/* Crosshairs */}
-                <div className={`absolute top-0 left-0 w-4 h-[1px] ${theme.marker}`} />
-                <div className={`absolute top-0 left-0 w-[1px] h-4 ${theme.marker}`} />
-
-                <div className={`absolute top-0 right-0 w-4 h-[1px] ${theme.marker}`} />
-                <div className={`absolute top-0 right-0 w-[1px] h-4 ${theme.marker}`} />
-
-                <div className={`absolute bottom-0 left-0 w-4 h-[1px] ${theme.marker}`} />
-                <div className={`absolute bottom-0 left-0 w-[1px] h-4 ${theme.marker}`} />
-
-                <div className={`absolute bottom-0 right-0 w-4 h-[1px] ${theme.marker}`} />
-                <div className={`absolute bottom-0 right-0 w-[1px] h-4 ${theme.marker}`} />
-                
-                <span className={`text-[10px] tracking-[0.3em] font-medium ${theme.muted} uppercase text-center max-w-[150px] leading-relaxed`}>
-                  Vehicle Placement Area
-                </span>
+          <div className="flex-1 w-full flex items-end justify-end relative my-8 pointer-events-none">
+             <div className="absolute -right-[5%] -bottom-[50%] w-[45%] max-w-[400px] flex items-center justify-center">
+                {/* Vehicle Image */}
+                <img 
+                  src="/src/assets/test1.png" 
+                  alt="Nighwan Vehicle" 
+                  className="w-full h-auto object-contain drop-shadow-2xl transform rotate-3"
+                  style={{ filter: 'drop-shadow(0 25px 25px rgba(0,0,0,0.3))' }}
+                />
              </div>
           </div>
 
@@ -651,12 +671,12 @@ int main() {
                 Zihao ZHAO
               </p>
             </div>
-            <div className="col-span-1">
-              <p className={`text-[9px] sm:text-[10px] font-bold tracking-[0.2em] ${theme.mutedStrong} uppercase mb-2`}>
-                
+            <div className="col-span-1 flex flex-col items-center text-center">
+              <p className={`text-[15px] sm:text-[18px] font-black tracking-[0.3em] ${theme.title} uppercase mb-1`}>
+                NIGHWAN
               </p>
-              <p className={`text-[10px] sm:text-xs ${theme.muted} leading-relaxed font-medium`}>
-
+              <p className={`text-[9px] sm:text-[10px] font-bold tracking-[0.15em] ${theme.muted} uppercase`}>
+                Autonomous Vision-Based Ground Vehicle
               </p>
             </div>
             <div className="col-span-1 flex justify-end pb-1">
