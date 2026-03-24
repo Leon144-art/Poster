@@ -17,6 +17,7 @@ const THEME_VARIANT = 6;
 // 4 = 右下起步，先垂直上行，再圆角转为水平左移 (已优化直角平滑弧度并修复坐标)
 const TRAIL_VARIANT = 4;
 const SHOW_TRAIL_ARROWS = true;
+const SHOW_VEHICLE_IMAGE = false;
 
 export default function App() {
   const THEMES: Record<number, any> = {
@@ -615,11 +616,22 @@ int main() {
           </div>
 
           {/* Floating System Specifications Text */}
-          <div className="absolute left-[5%] top-[45%] flex flex-col gap-2 pointer-events-auto z-30">
-            <p className={`text-[11px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-2 border-b border-slate-400/30 pb-2 inline-block`}>
+          <div className="absolute left-0 pl-8 sm:pl-10 top-[32%] flex flex-col gap-2 pointer-events-auto z-30">
+            {/* Masked Backdrop Blur Background */}
+            <div 
+              className="absolute -inset-y-6 left-0 -right-4 z-[-1]"
+              style={{
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                background: 'linear-gradient(to right, rgba(148, 163, 184, 0.08), transparent)',
+                maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+              }}
+            />
+            <p className={`text-[12px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-2 border-b border-slate-400/30 pb-2 inline-block`}>
               System Specifications
             </p>
-            <div className="grid grid-cols-[80px_1fr] gap-x-4 gap-y-1.5 text-[10px] sm:text-[11px] font-mono">
+            <div className="grid grid-cols-[80px_1fr] gap-x-4 gap-y-1.5 text-[11px] sm:text-[12px] font-mono relative">
               <span className={`${theme.mutedSoft} font-semibold`}>SOFTWARE</span>
               <span className={`${theme.mutedStrong}`}>C++ / OpenCV</span>
               
@@ -644,23 +656,26 @@ int main() {
           </div>
 
           {/* Center Product Display Marker (Subtle) */}
-          <div className="flex-1 w-full flex items-end justify-end relative my-8 pointer-events-none">
-             <div className="absolute -right-[5%] -bottom-[50%] w-[45%] max-w-[400px] flex items-center justify-center">
-                {/* Vehicle Image */}
-                <img 
-                  src="/src/assets/test1.png" 
-                  alt="Nighwan Vehicle" 
-                  className="w-full h-auto object-contain drop-shadow-2xl transform rotate-3"
-                  style={{ filter: 'drop-shadow(0 25px 25px rgba(0,0,0,0.3))' }}
-                />
-             </div>
+          <div className="flex-1 w-full flex items-end justify-end relative my-8 pointer-events-none z-20">
+             {SHOW_VEHICLE_IMAGE && (
+               <div className="absolute -right-[5%] -bottom-[10%] w-[45%] max-w-[400px] flex items-center justify-center">
+                  {/* Vehicle Image */}
+                  <img 
+                    src="/src/assets/test1.png" 
+                    alt="Nighwan Vehicle" 
+                    className="w-full h-auto object-contain drop-shadow-2xl transform rotate-3"
+                    style={{ filter: 'drop-shadow(0 25px 25px rgba(0,0,0,0.3))' }}
+                  />
+               </div>
+             )}
           </div>
 
-          {/* Footer Grid */}
-          <div className="relative grid grid-cols-3 gap-4 items-end pt-8">
+          {/* Footer */}
+          <div className="relative flex justify-between items-end pt-8 z-30">
             <div className="absolute top-[8px] left-[-7px] h-2.5 w-[68%] rounded-full bg-[linear-gradient(to_right,rgba(100,116,139,0.28)_0%,rgba(100,116,139,0.22)_16%,rgba(100,116,139,0.20)_34%,rgba(100,116,139,0.13)_58%,rgba(100,116,139,0.07)_75%,rgba(100,116,139,0.0)_100%)] blur-[2px]" />
             <div className="absolute top-[9px] left-[-5px] h-2 w-[65%] rounded-md bg-[linear-gradient(to_right,rgba(100,116,139,0.44)_0%,rgba(100,116,139,0.36)_10%,rgba(100,116,139,0.26)_24%,rgba(100,116,139,0.20)_44%,rgba(100,116,139,0.03)_68%,rgba(100,116,139,0.00)_100%)] backdrop-blur-md" />
-            <div className="col-span-1">
+            
+            <div className="flex flex-col">
               <p className={`text-[13px] sm:text-[15px] font-bold tracking-[0.2em] ${theme.mutedStrong} uppercase mb-2`}>
                 Group Members
               </p>
@@ -671,27 +686,16 @@ int main() {
                 Zihao ZHAO
               </p>
             </div>
-            <div className="col-span-1 flex flex-col items-center text-center">
-              <p className={`text-[15px] sm:text-[18px] font-black tracking-[0.3em] ${theme.title} uppercase mb-1`}>
+
+            <div className="flex flex-col items-end text-right pb-1 translate-y-[7px]">
+              <p className={`text-[32px] sm:text-[42px] font-black tracking-[0.15em] ${theme.title} uppercase mb-1 leading-none`}>
                 NIGHWAN
               </p>
-              <p className={`text-[9px] sm:text-[10px] font-bold tracking-[0.15em] ${theme.muted} uppercase`}>
+              <p className={`text-[9px] sm:text-[11px] font-bold tracking-[0.2em] ${theme.accent} uppercase`}>
                 Autonomous Vision-Based Ground Vehicle
               </p>
             </div>
-            <div className="col-span-1 flex justify-end pb-1">
-              <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full border-[1.5px] ${theme.panelInner ? 'border-transparent bg-[#1e293b]/50' : 'border-slate-200 bg-white/50'} flex items-center justify-center backdrop-blur-sm shadow-sm`}>
-                <div className={`w-3 h-3 ${theme.accentBg} rounded-full ${theme.accentShadow}`} />
-              </div>
-            </div>
           </div>
-        </div>
-
-        {/* Side Text */}
-        <div className="absolute left-6 top-1/2 -translate-y-1/2 -rotate-90 origin-center pointer-events-none z-20 opacity-60">
-          <p className={`text-[8px] sm:text-[10px] font-bold tracking-[0.4em] ${theme.mutedSoft} uppercase whitespace-nowrap`}>
-            Next Generation Autonomous Systems
-          </p>
         </div>
       </div>
     </div>
