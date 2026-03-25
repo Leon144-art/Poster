@@ -548,8 +548,8 @@ export default function App() {
               <h1 className={`text-6xl sm:text-7xl font-black tracking-tighter ${theme.title} leading-[0.85] mb-2  ml-[-8px]`}>
                 GROUP5<span className={theme.accent}>.</span>
               </h1>
-              <h2 className={`text-xl sm:text-2xl font-semibold tracking-widest ${theme.muted} uppercase mt-1`}>
-                NineOne Rover
+              <h2 className={`text-xl sm:text-xl font-semibold tracking-widest ${theme.muted} uppercase mt-1`}>
+                Applied Engineering Project
               </h2>
             </div>
             {/* 中间空白伸展占位符，自动把两边向左右推到绝对对齐 */}
