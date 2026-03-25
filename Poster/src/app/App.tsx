@@ -489,10 +489,10 @@ export default function App() {
             {/* 取景框 (暗示边界) */}
             <div className="absolute inset-0 overflow-hidden">
                {/* 4角折线 */}
-               <div className="absolute top-0 left-0 w-4 h-4 border-t-[1.5px] border-l-[1.5px] border-slate-400/60" />
-               <div className="absolute top-0 right-0 w-4 h-4 border-t-[1.5px] border-r-[1.5px] border-slate-400/60" />
-               <div className="absolute bottom-0 left-0 w-4 h-4 border-b-[1.5px] border-l-[1.5px] border-slate-400/60" />
-               <div className="absolute bottom-0 right-0 w-4 h-4 border-b-[1.5px] border-r-[1.5px] border-slate-400/60" />
+               <div className="absolute top-0 left-0 w-4 h-4 border-t-[1.5px] border-l-[1.5px] border-slate-400/80" />
+               <div className="absolute top-0 right-0 w-4 h-4 border-t-[1.5px] border-r-[1.5px] border-slate-400/80" />
+               <div className="absolute bottom-0 left-0 w-4 h-4 border-b-[1.5px] border-l-[1.5px] border-slate-400/80" />
+               <div className="absolute bottom-0 right-0 w-4 h-4 border-b-[1.5px] border-r-[1.5px] border-slate-400/80" />
 
                {/* 紧凑型 HUD 数据 (右上角) */}
                <div className="absolute top-2 right-2 flex flex-col gap-2.5 items-end z-20">
@@ -568,82 +568,78 @@ export default function App() {
             </div>
           </div>
 
-          {/* Floating Explanatory Text (Guiding to the right) */}
-          <div className="absolute left-0 pl-8 sm:pl-10 top-[30%] flex flex-col pointer-events-auto z-30 max-w-[340px]">
-            <div className="relative flex flex-col gap-3 self-start">
-              {/* Top-Left Bracket ⌜ */}
-              <div className="absolute -top-3 -left-4 w-3 h-3 border-t-[1.5px] border-l-[1.5px] border-slate-400/80" />
-              {/* Bottom-Right Bracket ⌟ */}
-              <div className="absolute -bottom-3 -right-4 w-3 h-3 border-b-[1.5px] border-r-[1.5px] border-slate-400/80" />
-
-              <div className="flex items-center gap-3">
-                <div className="w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_8px_#ef4444] animate-pulse" />
-                <p className={`text-[15px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-0`}>
-                  Vision System
-                </p>
-              </div>
-              
-              <p className={`text-[11px] sm:text-[13px] leading-relaxed ${theme.mutedStrong} font-mono`}>
-                Real-time lane detection via <span className={`${theme.mutedStrong} font-bold`}>cv::fitLine</span>. The system extracts the Region of Interest (ROI) to compute lateral offset and heading angle for autonomous navigation.
-              </p>
-
-              {/* Guiding Line to the right */}
-              <div className="flex items-center gap-2 mt-1 opacity-60">
-                <div className="w-16 h-[1.5px] bg-slate-400" />
-                <div className="w-2 h-2 border-t-[1.5px] border-r-[1.5px] border-slate-400 transform rotate-45 -ml-3" />
-                <span className="text-[9px] font-bold tracking-widest text-slate-400 uppercase ml-2">
-                  ROI Analysis
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Floating System Specifications Text */}
-          <div className="absolute left-0 pl-8 sm:pl-10 top-[53%] flex flex-col pointer-events-auto z-30">
-            {/* Masked Backdrop Blur Background */}
+          {/* Unified Floating Panel: Vision System & Specifications */}
+          <div className="absolute left-0 pl-8 sm:pl-10 top-[30%] flex flex-col pointer-events-auto z-30 max-w-[335px]">
+            {/* Masked Backdrop Blur Background (Shared) */}
             <div 
               className="absolute -inset-y-6 left-0 -right-4 z-[-1]"
               style={{
-                backdropFilter: 'blur(9px)',
+                backdropFilter: 'blur(6px)',
                 WebkitBackdropFilter: 'blur(5px)',
                 background: 'linear-gradient(to right, rgba(148, 163, 184, 0.08), transparent)',
-                maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+                maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
               }}
             />
-            
-            {/* Content Wrapper with Brackets */}
-            <div className="relative flex flex-col gap-2 self-start">
-              {/* Top-Left Bracket ⌜ */}
-              <div className="absolute -top-3 -left-4 w-3 h-3 border-t-[1.5px] border-l-[1.5px] border-slate-400/80" />
-              {/* Bottom-Right Bracket ⌟ */}
-              <div className="absolute -bottom-3 -right-4 w-3 h-3 border-b-[1.5px] border-r-[1.5px] border-slate-400/80" />
 
-              <p className={`text-[15px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-0 border-b border-slate-400/30 pb-2 inline-block`}>
-                System Specifications
-              </p>
-              <div className="grid grid-cols-[80px_1fr] gap-x-9 gap-y-1.5 text-[11px] sm:text-[12px] font-mono relative">
-                <span className={`${theme.mutedSoft} font-semibold`}>SOFTWARE</span>
-              <span className={`${theme.mutedStrong}`}>C++ / OpenCV</span>
-              
-              <span className={`${theme.mutedSoft} font-semibold`}>HOST</span>
-              <span className={`${theme.mutedStrong}`}>Raspberry Pi</span>
-              
-              <span className={`${theme.mutedSoft} font-semibold`}>VISION</span>
-              <span className={`${theme.mutedStrong}`}>Camera Module 3</span>
-              
-              <span className={`${theme.mutedSoft} font-semibold`}>MOTION</span>
-              <span className={`${theme.mutedStrong}`}>1-DOF SG90</span>
-              
-              <span className={`${theme.mutedSoft} font-semibold`}>COMMS</span>
-              <span className={`${theme.mutedStrong}`}>UART Driver Board</span>
-              
-              <span className={`${theme.mutedSoft} font-semibold`}>CHASSIS</span>
-              <span className={`${theme.mutedStrong}`}>4WD Differential</span>
-              
-              <span className={`${theme.mutedSoft} font-semibold`}>POWER</span>
-              <span className={`${theme.mutedStrong}`}>18650 × 2</span>
-            </div>
+            {/* Content Wrapper with Shared Brackets */}
+            <div className="relative flex flex-col gap-[45px] self-start">
+              {/* Top-Left Bracket ⌜ */}
+              <div className="absolute -top-4 -left-4 w-3 h-3 border-t-[1.5px] border-l-[1.5px] border-slate-400/80" />
+              {/* Bottom-Right Bracket ⌟ */}
+              <div className="absolute -bottom-4 -right-4 w-3 h-3 border-b-[1.5px] border-r-[1.5px] border-slate-400/80" />
+
+              {/* --- Vision System --- */}
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_8px_#ef4444] animate-pulse" />
+                  <p className={`text-[15px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-0`}>
+                    Vision System
+                  </p>
+                </div>
+                
+                <p className={`text-[11px] sm:text-[12px] leading-relaxed ${theme.mutedStrong} font-mono`}>
+                  Real-time lane detection via <span className={`${theme.mutedStrong} font-bold`}>cv::fitLine</span>. The system extracts the Region of Interest (ROI) to compute lateral offset and heading angle for autonomous navigation.
+                </p>
+
+                {/* Guiding Line to the right */}
+                <div className="flex items-center gap-2 mt-1 opacity-60 translate-x-50 -translate-y-7">
+                  <div className="w-16 h-[1.5px] bg-slate-400" />
+                  <div className="w-2 h-2 border-t-[1.5px] border-r-[1.5px] border-slate-400 transform rotate-45 -ml-3" />
+                  <span className="text-[9px] font-bold tracking-widest text-slate-400 uppercase ml-2">
+                    ROI Analysis
+                  </span>
+                </div>
+              </div>
+
+              {/* --- System Specifications --- */}
+              <div className="flex flex-col gap-2">
+                <p className={`text-[15px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-0 border-b border-slate-400/30 pb-2 inline-block`}>
+                  System Specifications
+                </p>
+                <div className="grid grid-cols-[80px_1fr] gap-x-9 gap-y-1.5 text-[11px] sm:text-[12px] font-mono relative">
+                  <span className={`${theme.mutedSoft} font-semibold`}>SOFTWARE</span>
+                  <span className={`${theme.mutedStrong}`}>C++ / OpenCV</span>
+                  
+                  <span className={`${theme.mutedSoft} font-semibold`}>HOST</span>
+                  <span className={`${theme.mutedStrong}`}>Raspberry Pi</span>
+                  
+                  <span className={`${theme.mutedSoft} font-semibold`}>VISION</span>
+                  <span className={`${theme.mutedStrong}`}>Camera Module 3</span>
+                  
+                  <span className={`${theme.mutedSoft} font-semibold`}>MOTION</span>
+                  <span className={`${theme.mutedStrong}`}>1-DOF SG90</span>
+                  
+                  <span className={`${theme.mutedSoft} font-semibold`}>COMMS</span>
+                  <span className={`${theme.mutedStrong}`}>UART Driver Board</span>
+                  
+                  <span className={`${theme.mutedSoft} font-semibold`}>CHASSIS</span>
+                  <span className={`${theme.mutedStrong}`}>4WD Differential</span>
+                  
+                  <span className={`${theme.mutedSoft} font-semibold`}>POWER</span>
+                  <span className={`${theme.mutedStrong}`}>18650 × 2</span>
+                </div>
+              </div>
             </div>
           </div>
 
