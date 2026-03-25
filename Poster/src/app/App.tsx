@@ -18,6 +18,7 @@ const THEME_VARIANT = 6;
 const TRAIL_VARIANT = 4;
 const SHOW_TRAIL_ARROWS = true;
 const SHOW_VEHICLE_IMAGE = true;
+const SHOW_NIGHWAN_BLUR = false;
 
 export default function App() {
   const THEMES: Record<number, any> = {
@@ -658,7 +659,7 @@ int main() {
           {/* Center Product Display Marker (Subtle) */}
           <div className="flex-1 w-full flex items-end justify-end relative my-8 pointer-events-none z-20">
              {SHOW_VEHICLE_IMAGE && (
-               <div className="absolute -right-[5.1%] -bottom-[31%] w-[47%] max-w-[400px] flex items-center justify-center">
+               <div className="absolute -right-[5.6%] -bottom-[31%] w-[48%] max-w-[400px] flex items-center justify-center">
                   {/* Vehicle Image */}
                   <img 
                     src="/src/assets/test3.png" 
@@ -687,7 +688,24 @@ int main() {
               </p>
             </div>
 
-            <div className="flex flex-col items-end text-right pb-1 translate-y-[7px]">
+            <div className="flex flex-col items-end text-right pb-1 translate-y-[7px] relative">
+              {SHOW_NIGHWAN_BLUR && (
+                <div 
+                  className="absolute z-[-1] 
+                             -top-5 -left-12
+                             -right-[40px] -bottom-[40px]
+                             sm:-right-[50px] sm:-bottom-[50px]"
+                  style={{
+                    backdropFilter: 'blur(5px)',
+                    WebkitBackdropFilter: 'blur(5px)',
+                    background: 'linear-gradient(to top left, rgba(148, 163, 184, 0.13), transparent)',
+                    maskImage: 'linear-gradient(to top, black 80%, transparent 100%), linear-gradient(to left, black 80%, transparent 100%)',
+                    WebkitMaskImage: 'linear-gradient(to top, black 80%, transparent 100%), linear-gradient(to left, black 80%, transparent 100%)',
+                    WebkitMaskComposite: 'source-in',
+                    maskComposite: 'intersect'
+                  }}
+                />
+              )}
               <p className={`text-[32px] sm:text-[42px] font-black tracking-[0.15em] ${theme.title} uppercase mb-1 leading-none`}>
                 NIGHWAN
               </p>
