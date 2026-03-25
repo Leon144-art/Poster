@@ -598,9 +598,20 @@ export default function App() {
                   </p>
                 </div>
                 
-                <p className={`text-[11px] sm:text-[12px] leading-relaxed ${theme.mutedStrong} font-mono`}>
-                  Real-time lane detection via <span className={`${theme.mutedStrong} font-bold`}>cv::fitLine</span>. The system extracts the Region of Interest (ROI) to compute lateral offset and heading angle for autonomous navigation.
-                </p>
+                <ul className={`text-[11px] sm:text-[12px] leading-relaxed ${theme.mutedStrong} font-mono flex flex-col gap-1.5`}>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-[0.4em] w-1 h-1 rounded-sm bg-slate-400/80 shrink-0" />
+                    <span>Real-time lane detection via <span className={`${theme.mutedStrong} font-bold`}>cv::fitLine</span></span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-[0.4em] w-1 h-1 rounded-sm bg-slate-400/80 shrink-0" />
+                    <span>Line loss memory</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-[0.4em] w-1 h-1 rounded-sm bg-slate-400/80 shrink-0" />
+                    <span>Lateral offset & heading angle computation</span>
+                  </li>
+                </ul>
 
                 {/* Guiding Arrow to the right (ROI Panel) */}
                 <div className="absolute top-[45px] left-[93%] w-[90px] flex items-center opacity-70 pointer-events-none z-10">
