@@ -475,15 +475,16 @@ export default function App() {
         {/* 3. Defocused Frosted Glass UI Panels */}
         <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 10 }}>
           {/* 新的 ROI HUD 视窗面板 (去框化 AR 全息风格) */}
-          <div className="absolute top-[20%] right-[10%] w-43 h-59 pointer-events-none">
+          <div className="absolute top-[20%] right-[10%] w-[172px] h-[236px] pointer-events-none">
             
-            {/* 独立的悬浮标签：ALGORITHM (左上角) */}
+            {/* 独立的悬浮标签：ALGORITHM (左上角) - 已注释
             <div className="absolute -top-6 -left-4 flex items-center gap-2">
                <div className={`w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_8px_#ef4444]`} />
                <span className="text-[10px] font-mono text-slate-500 font-bold tracking-widest uppercase">
                  Algorithm: cv::fitLine
                </span>
             </div>
+            */}
 
             {/* 取景框 (暗示边界) */}
             <div className="absolute inset-0 overflow-hidden">
@@ -493,6 +494,33 @@ export default function App() {
                <div className="absolute bottom-0 left-0 w-4 h-4 border-b-[1.5px] border-l-[1.5px] border-slate-400/60" />
                <div className="absolute bottom-0 right-0 w-4 h-4 border-b-[1.5px] border-r-[1.5px] border-slate-400/60" />
 
+               {/* 紧凑型 HUD 数据 (右上角) */}
+               <div className="absolute top-2 right-2 flex flex-col gap-2.5 items-end z-20">
+                 {/* Lateral Offset */}
+                 <div className="flex flex-col items-end gap-0.5">
+                   <div className="flex items-center gap-1.5">
+                     <span className={`text-[8px] font-bold ${theme.muted} tracking-widest uppercase`}>LATERAL</span>
+                     <div className="w-1.5 h-1.5 bg-cyan-500/80 rounded-sm" />
+                   </div>
+                   <div className="flex items-baseline gap-0.5">
+                     <span className={`text-xs font-mono font-black ${theme.mutedStrong}`}>+12.5</span>
+                     <span className={`text-[8px] font-mono ${theme.muted}`}>px</span>
+                   </div>
+                 </div>
+
+                 {/* Heading Angle */}
+                 <div className="flex flex-col items-end gap-0.5">
+                   <div className="flex items-center gap-1.5">
+                     <span className={`text-[8px] font-bold ${theme.muted} tracking-widest uppercase`}>HEADING</span>
+                     <div className="w-1.5 h-1.5 bg-amber-500/80 rounded-sm" />
+                   </div>
+                   <div className="flex items-baseline gap-0.5">
+                     <span className={`text-xs font-mono font-black ${theme.mutedStrong}`}>-15.0</span>
+                     <span className={`text-[8px] font-mono ${theme.muted}`}>°</span>
+                   </div>
+                 </div>
+               </div>
+
                {/* 中心十字准星 */}
                <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-400/20 border-dashed border-t border-slate-400/30" />
                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-slate-400/20 border-dashed border-l border-slate-400/30" />
@@ -501,41 +529,6 @@ export default function App() {
                <div className={`absolute w-[150%] h-[1.5px] ${trail.fitLineColor} ${trail.fitLineGlow} ${trail.linePosition} ${trail.lineAngle}`}>
                  {/* 重心 (Center of Mass) */}
                  <div className={`absolute left-[50%] -top-[3px] w-2 h-2 bg-white border-2 ${trail.fitLinePointMain} rounded-full shadow-[0_0_6px_#22c55e]`} />
-               </div>
-            </div>
-
-            {/* 独立的悬浮标签：LATERAL OFFSET & HEADING ANGLE (垂直排列，左对齐) */}
-            <div className="absolute top-full mt-6 left-0 flex flex-col gap-3">
-               {/* Lateral Offset */}
-               <div className="flex flex-col gap-1">
-                 <div className="flex items-center gap-2">
-                   <div className="w-[1.5px] h-3 bg-cyan-500/70" />
-                   <span className="text-[8px] font-bold text-slate-400 tracking-widest">LATERAL OFFSET</span>
-                 </div>
-                 <div className="flex items-baseline gap-1 pl-2.5">
-                   <span className="text-sm font-mono font-black text-slate-700">+12.5</span>
-                   <span className="text-[8px] font-mono text-slate-400">px</span>
-                 </div>
-                 {/* 极简指示线 */}
-                 <div className="w-16 h-[1.5px] bg-slate-200 ml-2.5 mt-0.5 relative">
-                   <div className="absolute top-0 left-1/2 w-5 h-[1.5px] bg-cyan-500" />
-                 </div>
-               </div>
-
-               {/* Heading Angle */}
-               <div className="flex flex-col gap-1">
-                 <div className="flex items-center gap-2">
-                   <div className="w-[1.5px] h-3 bg-amber-500/70" />
-                   <span className="text-[8px] font-bold text-slate-400 tracking-widest">HEADING ANGLE</span>
-                 </div>
-                 <div className="flex items-baseline gap-1 pl-2.5">
-                   <span className="text-sm font-mono font-black text-slate-700">-15.0</span>
-                   <span className="text-[8px] font-mono text-slate-400">°</span>
-                 </div>
-                 {/* 极简指示线 */}
-                 <div className="w-16 h-[1.5px] bg-slate-200 ml-2.5 mt-0.5 relative overflow-hidden">
-                   <div className="absolute top-0 right-1/2 w-4 h-[1.5px] bg-amber-500" />
-                 </div>
                </div>
             </div>
 
@@ -565,7 +558,7 @@ export default function App() {
                 <div className={`w-2 h-7 ${theme.mutedStrongBg}`} />
               </div>
               <p className={`text-[10px] font-bold tracking-[0.2em] ${theme.mutedSoft} uppercase`}>
-                Proto-05
+                Proto-04
               </p>
             </div>
           </div>
@@ -581,7 +574,7 @@ export default function App() {
               </div>
               
               <p className={`text-[11px] sm:text-[12px] leading-relaxed ${theme.mutedStrong} font-mono`}>
-                Real-time lane detection via <span className="text-slate-400 font-bold">cv::fitLine</span>. The system extracts the Region of Interest (ROI) to compute lateral offset and heading angle for autonomous navigation.
+                Real-time lane detection via <span className={`${theme.mutedStrong} font-bold`}>cv::fitLine</span>. The system extracts the Region of Interest (ROI) to compute lateral offset and heading angle for autonomous navigation.
               </p>
 
               {/* Guiding Line to the right */}
