@@ -1,5 +1,6 @@
 import React from 'react';
 import { Settings, Cpu } from 'lucide-react';
+import vehicleImage from '../assets/test3.png';
 
 // 切换主题：
 // 1 = 原始版本 (浅灰系 + 蓝黄双光晕，就是最开始的样子)
@@ -473,103 +474,71 @@ export default function App() {
 
         {/* 3. Defocused Frosted Glass UI Panels */}
         <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 10 }}>
-          {/* 新的 ROI HUD 视窗面板 */}
-          <div className="absolute top-[13.5%] right-[8%] w-64 h-72 transform rotate-2 pointer-events-auto">
-            {/* 0. 纯阴影层：只负责大卡片外轮廓的悬浮感 */}
-            <div className="absolute inset-0 rounded-2xl shadow-[0_18px_44px_rgba(15,23,42,0.18)] pointer-events-none" />
+          {/* 新的 ROI HUD 视窗面板 (去框化 AR 全息风格) */}
+          <div className="absolute top-[18%] right-[10%] w-56 h-40 pointer-events-none">
             
-            {/* 1. 背景镂空层：负责提供模糊、渐变、以及外部圆角边框 */}
-            <div 
-              className={`absolute inset-0 rounded-2xl ${theme.panelBase_line || 'bg-gradient-to-br from-white/60 to-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.04)] backdrop-blur-md border border-white/40'} pointer-events-none`}
-              style={{
-                // 使用多重 mask 与 destination-out 将中间 Visualizer 的区域透明镂空
-                // 洞口尺寸：宽度224px(256px-左右16px)，高度152px(避开顶部Header与底部HUD)
-                WebkitMaskImage: `linear-gradient(black, black), linear-gradient(black, black)`,
-                WebkitMaskSize: `100% 100%, 224px 152px`,
-                WebkitMaskPosition: `0 0, 16px 46px`,
-                WebkitMaskRepeat: `no-repeat`,
-                WebkitMaskComposite: `destination-out`,
-                maskComposite: `exclude`
-              }}
-            />
-
-            {/* 2. 内容层：完全透明容器，负责安放原来的三个元素 */}
-            <div className="relative w-full h-full p-4 flex flex-col pointer-events-none">
-              
-              {/* Header: ROI Camera/Algorithm Info */}
-              <div className="flex items-center justify-between px-1 mb-3">
-              <div className="flex items-center gap-2">
-                 <div className={`w-2 h-2 bg-red-500 rounded-full shadow-[0_0_8px_#ef4444]`} />
-                 <span className="text-[10px] font-mono text-slate-700 font-bold tracking-wider">ALGORITHM: cv::fitLine</span>
-              </div>
-              <Settings className="w-3.5 h-3.5 text-slate-400" />
+            {/* 独立的悬浮标签：ALGORITHM (左上角) */}
+            <div className="absolute -top-6 -left-4 flex items-center gap-2">
+               <div className={`w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_8px_#ef4444]`} />
+               <span className="text-[10px] font-mono text-slate-500 font-bold tracking-widest uppercase">
+                 Algorithm: cv::fitLine
+               </span>
             </div>
 
-            {/* Main Visualizer Window */}
-            <div className={`relative w-full flex-1 ${theme.panelInner_line || 'bg-slate-900/5 border-slate-900/10'} rounded-xl border overflow-hidden`}>
-               {/* 模拟的四角对焦框 (Focus Brackets) */}
-               <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-slate-400 opacity-70"></div>
-               <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-slate-400 opacity-70"></div>
-               <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-slate-400 opacity-70"></div>
-               <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-slate-400 opacity-70"></div>
+            {/* 取景框 (暗示边界) */}
+            <div className="absolute inset-0">
+               {/* 4角折线 */}
+               <div className="absolute top-0 left-0 w-4 h-4 border-t-[1.5px] border-l-[1.5px] border-slate-400/60" />
+               <div className="absolute top-0 right-0 w-4 h-4 border-t-[1.5px] border-r-[1.5px] border-slate-400/60" />
+               <div className="absolute bottom-0 left-0 w-4 h-4 border-b-[1.5px] border-l-[1.5px] border-slate-400/60" />
+               <div className="absolute bottom-0 right-0 w-4 h-4 border-b-[1.5px] border-r-[1.5px] border-slate-400/60" />
 
-               {/* 十字准星 */}
-               <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-300/40 border-dashed border-t border-slate-400/30"></div>
-               <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-slate-300/40 border-dashed border-l border-slate-400/30"></div>
+               {/* 中心十字准星 */}
+               <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-400/20 border-dashed border-t border-slate-400/30" />
+               <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-slate-400/20 border-dashed border-l border-slate-400/30" />
 
                {/* 核心视觉元素：拟合出的绿色数学直线, 模拟 cv::fitLine 结果 */}
-               {/* 移除了 transform -translate-x-1/2 -translate-y-1/2 以恢复原始对齐位置 */}
-               <div className={`absolute w-[150%] h-[2px] ${trail.fitLineColor} ${trail.fitLineGlow} ${trail.linePosition} ${trail.lineAngle}`}>
+               <div className={`absolute w-[150%] h-[1.5px] ${trail.fitLineColor} ${trail.fitLineGlow} ${trail.linePosition} ${trail.lineAngle}`}>
                  {/* 重心 (Center of Mass) */}
-                 <div className={`absolute left-[50%] -top-[3px] w-2 h-2 bg-white border-2 ${trail.fitLinePointMain} rounded-full shadow-sm`}></div>
+                 <div className={`absolute left-[50%] -top-[3px] w-2 h-2 bg-white border-2 ${trail.fitLinePointMain} rounded-full shadow-[0_0_6px_#22c55e]`} />
                </div>
             </div>
 
-            {/* Dual-State Readout HUD - 合并为单一大面板，左右边缘渐变模糊 */}
-            <div className="mt-2 relative w-full h-16 overflow-hidden rounded-lg">
-               {/* 渐变模糊背景层 */}
-               <div 
-                 className="absolute inset-0 bg-white/65 backdrop-blur-md border-y border-white/50"
-                 style={{
-                   maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
-                   WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)'
-                 }}
-               />
-               
-               {/* 内容层 */}
-               <div className="relative z-10 w-full h-full flex items-center justify-center gap-6">
-                  {/* Left: Lateral Offset */}
-                  <div className="flex flex-col justify-center">
-                     <span className="text-[7px] font-bold text-slate-500 tracking-wider">LATERAL OFFSET</span>
-                     <div className="flex items-baseline gap-0.5 mt-0.5">
-                       <span className="text-sm font-black text-slate-800">+12.5</span>
-                       <span className="text-[7px] font-bold text-slate-400">px</span>
-                     </div>
-                     <div className="w-16 h-1 bg-slate-200 rounded-full mt-1 relative">
-                        <div className="absolute top-0 bottom-0 left-1/2 w-[30%] bg-cyan-500 rounded-r-full"></div>
-                        <div className="absolute top-1/2 left-1/2 w-0.5 h-2 -mt-1 bg-slate-400"></div>
-                     </div>
-                  </div>
+            {/* 独立的悬浮标签：LATERAL OFFSET & HEADING ANGLE (底部错落) */}
+            <div className="absolute -bottom-14 left-0 right-0 flex justify-between items-start">
+               {/* Lateral Offset */}
+               <div className="flex flex-col gap-1">
+                 <div className="flex items-center gap-2">
+                   <div className="w-[1.5px] h-3 bg-cyan-500/70" />
+                   <span className="text-[8px] font-bold text-slate-400 tracking-widest">LATERAL OFFSET</span>
+                 </div>
+                 <div className="flex items-baseline gap-1 pl-2.5">
+                   <span className="text-sm font-mono font-black text-slate-700">+12.5</span>
+                   <span className="text-[8px] font-mono text-slate-400">px</span>
+                 </div>
+                 {/* 极简指示线 */}
+                 <div className="w-16 h-[1.5px] bg-slate-200 ml-2.5 mt-0.5 relative">
+                   <div className="absolute top-0 left-1/2 w-5 h-[1.5px] bg-cyan-500" />
+                 </div>
+               </div>
 
-                  {/* Divider */}
-                  <div className="w-[1px] h-8 bg-slate-300/50"></div>
-
-                  {/* Right: Heading Angle */}
-                  <div className="flex flex-col justify-center">
-                     <span className="text-[7px] font-bold text-slate-500 tracking-wider">HEADING ANGLE</span>
-                     <div className="flex items-baseline gap-0.5 mt-0.5">
-                       <span className="text-sm font-black text-slate-800">-15.0</span>
-                       <span className="text-[7px] font-bold text-slate-400">°</span>
-                     </div>
-                     <div className="w-16 h-1 bg-slate-200 rounded-full mt-1 relative overflow-hidden">
-                        <div className="absolute top-0 bottom-0 right-1/2 w-[25%] bg-amber-500 rounded-l-full"></div>
-                        <div className="absolute top-1/2 left-1/2 w-0.5 h-2 -mt-1 bg-slate-400"></div>
-                     </div>
-                  </div>
+               {/* Heading Angle */}
+               <div className="flex flex-col gap-1 items-end mt-4">
+                 <div className="flex items-center gap-2">
+                   <span className="text-[8px] font-bold text-slate-400 tracking-widest">HEADING ANGLE</span>
+                   <div className="w-[1.5px] h-3 bg-amber-500/70" />
+                 </div>
+                 <div className="flex items-baseline gap-1 pr-2.5">
+                   <span className="text-sm font-mono font-black text-slate-700">-15.0</span>
+                   <span className="text-[8px] font-mono text-slate-400">°</span>
+                 </div>
+                 {/* 极简指示线 */}
+                 <div className="w-16 h-[1.5px] bg-slate-200 mr-2.5 mt-0.5 relative overflow-hidden">
+                   <div className="absolute top-0 right-1/2 w-4 h-[1.5px] bg-amber-500" />
+                 </div>
                </div>
             </div>
-            {/* 内容层结束 */}
-            </div>
+
           </div>
         </div>
 
@@ -647,7 +616,7 @@ export default function App() {
                <div className="absolute -right-[5.6%] -bottom-[31%] w-[48%] max-w-[400px] flex items-center justify-center">
                   {/* Vehicle Image */}
                   <img 
-                    src="/src/assets/test3.png" 
+                    src={vehicleImage} 
                     alt="Nighwan Vehicle" 
                     className="w-full h-auto object-contain drop-shadow-2xl transform rotate-[0.5deg]"
                     style={{ filter: 'drop-shadow(0 25px 25px rgba(0,0,0,0.3))' }}
