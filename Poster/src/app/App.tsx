@@ -603,11 +603,11 @@ export default function App() {
                 </p>
 
                 {/* Guiding Arrow to the right (ROI Panel) */}
-                <div className="absolute top-[45px] left-[90%] w-[130px] flex items-center opacity-70 pointer-events-none z-10">
+                <div className="absolute top-[45px] left-[93%] w-[90px] flex items-center opacity-70 pointer-events-none z-10">
                   <div className={`w-1 h-1 rounded-full ${theme.mutedStrongBg}`} />
-                  <div className={`flex-1 h-[1.5px] border-t-[1.5px] border-dashed border-slate-500/50`} />
+                  <div className={`flex-1 h-[2px] border-t-[2px] border-dashed border-slate-500/50`} />
                   <div className={`w-2 h-2 border-t-[1.5px] border-r-[1.5px] border-slate-500/80 transform rotate-45 -ml-1`} />
-                  <span className={`absolute -top-4 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-widest ${theme.muted} uppercase whitespace-nowrap`}>
+                  <span className={`absolute -top-4 left-1/2 -translate-x-1/2 text-[10px] font-bold tracking-widest ${theme.muted} uppercase whitespace-nowrap`}>
                     ROI Analysis
                   </span>
                 </div>
