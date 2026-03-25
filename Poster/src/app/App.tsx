@@ -22,6 +22,26 @@ const SHOW_VEHICLE_IMAGE = true;
 const SHOW_NIGHWAN_BLUR = false;
 
 export default function App() {
+  const [cameraPos, setCameraPos] = React.useState({ x: 35, y: 65 });
+  const [isDraggingCamera, setIsDraggingCamera] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!isDraggingCamera) return;
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      setCameraPos({ x, y });
+    };
+    const handleMouseUp = () => setIsDraggingCamera(false);
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDraggingCamera]);
+
   const THEMES: Record<number, any> = {
     1: {
       pageBg: 'bg-neutral-200',
@@ -470,6 +490,50 @@ export default function App() {
               </>
             )}
           </svg>
+        </div>
+
+        {/* --- Holographic Camera Beam --- */}
+        {[
+          // Left edge
+          `polygon(${cameraPos.x}% ${cameraPos.y}%, calc(90% - 172px) 20%, calc(90% - 172px) calc(20% + 236px))`,
+          // Top edge
+          `polygon(${cameraPos.x}% ${cameraPos.y}%, calc(90% - 172px) 20%, 90% 20%)`,
+          // Right edge
+          `polygon(${cameraPos.x}% ${cameraPos.y}%, 90% 20%, 90% calc(20% + 236px))`,
+          // Bottom edge
+          `polygon(${cameraPos.x}% ${cameraPos.y}%, calc(90% - 172px) calc(20% + 236px), 90% calc(20% + 236px))`
+        ].map((clipPath, i) => (
+          <React.Fragment key={i}>
+            <div
+              className="absolute inset-0 pointer-events-none z-[9]"
+              style={{
+                background: `linear-gradient(to right, transparent, #22d3ee)`,
+                opacity: 0.12,
+                clipPath
+              }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none z-[9] mix-blend-screen"
+              style={{
+                backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 2px, #22d3ee 2px, #22d3ee 4px)`,
+                opacity: 0.08,
+                clipPath
+              }}
+            />
+          </React.Fragment>
+        ))}
+
+        {/* --- Camera Origin Control Point --- */}
+        <div
+          className="absolute w-12 h-12 -ml-6 -mt-6 rounded-full cursor-move z-50 group flex items-center justify-center"
+          style={{ left: `${cameraPos.x}%`, top: `${cameraPos.y}%` }}
+          onMouseDown={() => setIsDraggingCamera(true)}
+          title="Drag to move camera origin"
+        >
+          {/* Invisible hit area, shows dot on hover */}
+          <div className={`w-3 h-3 rounded-full bg-cyan-400 opacity-0 group-hover:opacity-100 transition-all shadow-[0_0_10px_#22d3ee] ${isDraggingCamera ? 'opacity-100 scale-150' : ''}`} />
+          {/* Subtle pulse to hint it's there */}
+          <div className={`absolute inset-0 rounded-full border border-cyan-400/30 animate-ping opacity-20 group-hover:opacity-0`} />
         </div>
 
         {/* 3. Defocused Frosted Glass UI Panels */}
