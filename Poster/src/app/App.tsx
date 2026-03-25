@@ -284,8 +284,8 @@ export default function App() {
         'L 460 320 ' +          // 笔直向上直到 y=320
         'Q 460 200, 340 200 ' + // 使用二次贝塞尔曲线做90度平滑转角（半径120）
         'L -50 200',            // 水平向左直接穿出画面屏幕 (原左上起点是y=200附近)
-      lineAngle: 'rotate-[33deg]', // y = 0.570x + 13.901 对应的图像坐标系角度
-      linePosition: '-left-[15%] top-[71%]', // 取 x=250 时的中点，y≈156.4，再按 500 宽基准等比映射
+      lineAngle: 'rotate-[60deg]', // y = 0.570x + 13.901 对应的图像坐标系角度
+      linePosition: '-left-[17%] top-[71%]', // 取 x=250 时的中点，y≈156.4，再按 500 宽基准等比映射
       normalAngle: 'rotate-[119.68deg]', // 与绿线垂直的法向量方向
       normalPosition: 'left-[50%] top-[70%]',
       centerDotBorder: 'border-blue-500/80',
@@ -526,9 +526,14 @@ export default function App() {
                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-slate-400/20 border-dashed border-l border-slate-400/30" />
 
                {/* 核心视觉元素：拟合出的绿色数学直线, 模拟 cv::fitLine 结果 */}
-               <div className={`absolute w-[150%] h-[1.5px] ${trail.fitLineColor} ${trail.fitLineGlow} ${trail.linePosition} ${trail.lineAngle}`}>
+               <div className={`absolute w-[150%] h-[1.5px] ${trail.linePosition} ${trail.lineAngle}`}>
+                 {/* 延长的线体容器，增加高度以容纳阴影，使用 mask-image 实现两端平滑渐淡 */}
+                 <div className={`absolute top-1/2 -translate-y-1/2 h-[40px] w-[400%] -left-[150%] [mask-image:linear-gradient(to_right,transparent_35%,black_45%,black_55%,transparent_65%)] [-webkit-mask-image:linear-gradient(to_right,transparent_32%,black_40%,black_49%,transparent_58%)] pointer-events-none`}>
+                   {/* 真正的线体，带有颜色和发光 */}
+                   <div className={`absolute top-1/2 -translate-y-1/2 w-full h-[2.4px] ${trail.fitLineColor} ${trail.fitLineGlow}`} />
+                 </div>
                  {/* 重心 (Center of Mass) */}
-                 <div className={`absolute left-[50%] -top-[3px] w-2 h-2 bg-white border-2 ${trail.fitLinePointMain} rounded-full shadow-[0_0_6px_#22c55e]`} />
+                 <div className={`absolute left-[28%] -top-[3px] w-2 h-2 bg-white border-2 ${trail.fitLinePointMain} rounded-full shadow-[0_0_6px_#22c55e]`} />
                </div>
             </div>
 
@@ -566,6 +571,11 @@ export default function App() {
           {/* Floating Explanatory Text (Guiding to the right) */}
           <div className="absolute left-0 pl-8 sm:pl-10 top-[30%] flex flex-col pointer-events-auto z-30 max-w-[340px]">
             <div className="relative flex flex-col gap-3 self-start">
+              {/* Top-Left Bracket ⌜ */}
+              <div className="absolute -top-3 -left-4 w-3 h-3 border-t-[1.5px] border-l-[1.5px] border-slate-400/80" />
+              {/* Bottom-Right Bracket ⌟ */}
+              <div className="absolute -bottom-3 -right-4 w-3 h-3 border-b-[1.5px] border-r-[1.5px] border-slate-400/80" />
+
               <div className="flex items-center gap-3">
                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_8px_#ef4444] animate-pulse" />
                 <p className={`text-[15px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-0`}>
@@ -573,7 +583,7 @@ export default function App() {
                 </p>
               </div>
               
-              <p className={`text-[11px] sm:text-[12px] leading-relaxed ${theme.mutedStrong} font-mono`}>
+              <p className={`text-[11px] sm:text-[13px] leading-relaxed ${theme.mutedStrong} font-mono`}>
                 Real-time lane detection via <span className={`${theme.mutedStrong} font-bold`}>cv::fitLine</span>. The system extracts the Region of Interest (ROI) to compute lateral offset and heading angle for autonomous navigation.
               </p>
 
