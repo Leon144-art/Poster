@@ -475,7 +475,7 @@ export default function App() {
         {/* 3. Defocused Frosted Glass UI Panels */}
         <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 10 }}>
           {/* 新的 ROI HUD 视窗面板 (去框化 AR 全息风格) */}
-          <div className="absolute top-[18%] right-[10%] w-56 h-40 pointer-events-none">
+          <div className="absolute top-[20%] right-[10%] w-43 h-59 pointer-events-none">
             
             {/* 独立的悬浮标签：ALGORITHM (左上角) */}
             <div className="absolute -top-6 -left-4 flex items-center gap-2">
@@ -486,7 +486,7 @@ export default function App() {
             </div>
 
             {/* 取景框 (暗示边界) */}
-            <div className="absolute inset-0">
+            <div className="absolute inset-0 overflow-hidden">
                {/* 4角折线 */}
                <div className="absolute top-0 left-0 w-4 h-4 border-t-[1.5px] border-l-[1.5px] border-slate-400/60" />
                <div className="absolute top-0 right-0 w-4 h-4 border-t-[1.5px] border-r-[1.5px] border-slate-400/60" />
@@ -504,8 +504,8 @@ export default function App() {
                </div>
             </div>
 
-            {/* 独立的悬浮标签：LATERAL OFFSET & HEADING ANGLE (底部错落) */}
-            <div className="absolute -bottom-14 left-0 right-0 flex justify-between items-start">
+            {/* 独立的悬浮标签：LATERAL OFFSET & HEADING ANGLE (垂直排列，左对齐) */}
+            <div className="absolute top-full mt-6 left-0 flex flex-col gap-3">
                {/* Lateral Offset */}
                <div className="flex flex-col gap-1">
                  <div className="flex items-center gap-2">
@@ -523,17 +523,17 @@ export default function App() {
                </div>
 
                {/* Heading Angle */}
-               <div className="flex flex-col gap-1 items-end mt-4">
+               <div className="flex flex-col gap-1">
                  <div className="flex items-center gap-2">
-                   <span className="text-[8px] font-bold text-slate-400 tracking-widest">HEADING ANGLE</span>
                    <div className="w-[1.5px] h-3 bg-amber-500/70" />
+                   <span className="text-[8px] font-bold text-slate-400 tracking-widest">HEADING ANGLE</span>
                  </div>
-                 <div className="flex items-baseline gap-1 pr-2.5">
+                 <div className="flex items-baseline gap-1 pl-2.5">
                    <span className="text-sm font-mono font-black text-slate-700">-15.0</span>
                    <span className="text-[8px] font-mono text-slate-400">°</span>
                  </div>
                  {/* 极简指示线 */}
-                 <div className="w-16 h-[1.5px] bg-slate-200 mr-2.5 mt-0.5 relative overflow-hidden">
+                 <div className="w-16 h-[1.5px] bg-slate-200 ml-2.5 mt-0.5 relative overflow-hidden">
                    <div className="absolute top-0 right-1/2 w-4 h-[1.5px] bg-amber-500" />
                  </div>
                </div>
@@ -565,18 +565,43 @@ export default function App() {
                 <div className={`w-2 h-7 ${theme.mutedStrongBg}`} />
               </div>
               <p className={`text-[10px] font-bold tracking-[0.2em] ${theme.mutedSoft} uppercase`}>
-                Proto-04
+                Proto-05
               </p>
             </div>
           </div>
 
+          {/* Floating Explanatory Text (Guiding to the right) */}
+          <div className="absolute left-0 pl-8 sm:pl-10 top-[30%] flex flex-col pointer-events-auto z-30 max-w-[340px]">
+            <div className="relative flex flex-col gap-3 self-start">
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_8px_#ef4444] animate-pulse" />
+                <p className={`text-[15px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-0`}>
+                  Vision System
+                </p>
+              </div>
+              
+              <p className={`text-[11px] sm:text-[12px] leading-relaxed ${theme.mutedStrong} font-mono`}>
+                Real-time lane detection via <span className="text-slate-400 font-bold">cv::fitLine</span>. The system extracts the Region of Interest (ROI) to compute lateral offset and heading angle for autonomous navigation.
+              </p>
+
+              {/* Guiding Line to the right */}
+              <div className="flex items-center gap-2 mt-1 opacity-60">
+                <div className="w-16 h-[1.5px] bg-slate-400" />
+                <div className="w-2 h-2 border-t-[1.5px] border-r-[1.5px] border-slate-400 transform rotate-45 -ml-3" />
+                <span className="text-[9px] font-bold tracking-widest text-slate-400 uppercase ml-2">
+                  ROI Analysis
+                </span>
+              </div>
+            </div>
+          </div>
+
           {/* Floating System Specifications Text */}
-          <div className="absolute left-0 pl-8 sm:pl-10 top-[32%] flex flex-col pointer-events-auto z-30">
+          <div className="absolute left-0 pl-8 sm:pl-10 top-[53%] flex flex-col pointer-events-auto z-30">
             {/* Masked Backdrop Blur Background */}
             <div 
               className="absolute -inset-y-6 left-0 -right-4 z-[-1]"
               style={{
-                backdropFilter: 'blur(5px)',
+                backdropFilter: 'blur(9px)',
                 WebkitBackdropFilter: 'blur(5px)',
                 background: 'linear-gradient(to right, rgba(148, 163, 184, 0.08), transparent)',
                 maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
@@ -591,10 +616,10 @@ export default function App() {
               {/* Bottom-Right Bracket ⌟ */}
               <div className="absolute -bottom-3 -right-4 w-3 h-3 border-b-[1.5px] border-r-[1.5px] border-slate-400/80" />
 
-              <p className={`text-[12px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-0 border-b border-slate-400/30 pb-2 inline-block`}>
+              <p className={`text-[15px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-0 border-b border-slate-400/30 pb-2 inline-block`}>
                 System Specifications
               </p>
-              <div className="grid grid-cols-[80px_1fr] gap-x-4 gap-y-1.5 text-[11px] sm:text-[12px] font-mono relative">
+              <div className="grid grid-cols-[80px_1fr] gap-x-9 gap-y-1.5 text-[11px] sm:text-[12px] font-mono relative">
                 <span className={`${theme.mutedSoft} font-semibold`}>SOFTWARE</span>
               <span className={`${theme.mutedStrong}`}>C++ / OpenCV</span>
               
