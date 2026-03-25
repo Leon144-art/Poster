@@ -1,6 +1,8 @@
 import React from 'react';
-import { Settings, Cpu } from 'lucide-react';
+import { Settings, Cpu, Download } from 'lucide-react';
 import vehicleImage from '../assets/test3.png';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 // 切换主题：
 // 1 = 原始版本 (浅灰系 + 蓝黄双光晕，就是最开始的样子)
@@ -24,6 +26,8 @@ const SHOW_NIGHWAN_BLUR = false;
 export default function App() {
   const [cameraPos, setCameraPos] = React.useState({ x: 35, y: 65 });
   const [isDraggingCamera, setIsDraggingCamera] = React.useState(false);
+  const [isExporting, setIsExporting] = React.useState(false);
+  const posterRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
     if (!isDraggingCamera) return;
@@ -385,10 +389,65 @@ export default function App() {
     trail.arrowLetterSpacing,
   ]);
 
+  const handleExport = async () => {
+    const posterElement = posterRef.current;
+    if (!posterElement || isExporting) return;
+
+    try {
+      setIsExporting(true);
+
+      if ('fonts' in document) {
+        await (document as Document & { fonts: FontFaceSet }).fonts.ready;
+      }
+      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
+
+      const rect = posterElement.getBoundingClientRect();
+      const pdfWidth = Math.round(rect.width);
+      const pdfHeight = Math.round(rect.height);
+
+      const canvas = await html2canvas(posterElement, {
+        scale: Math.min(window.devicePixelRatio || 1, 3),
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        windowWidth: document.documentElement.clientWidth,
+        windowHeight: document.documentElement.clientHeight,
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+        unit: 'px',
+        format: [pdfWidth, pdfHeight],
+        compress: true,
+      });
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('Poster.pdf');
+    } catch (error) {
+      console.error('PDF export failed:', error);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
-    <div className={`min-h-screen ${theme.pageBg} flex items-center justify-center p-4 sm:p-8 font-sans overflow-hidden`}>
+    <div className={`min-h-screen ${theme.pageBg} flex items-center justify-center p-4 sm:p-8 font-sans overflow-hidden relative group/page`}>
+      
+      {/* Export Button - Hidden by default, visible on hover over page */}
+      <button
+        onClick={handleExport}
+        disabled={isExporting}
+        className="absolute bottom-8 right-8 p-3 rounded-full bg-slate-400/10 hover:bg-slate-500/30 text-slate-400 hover:text-slate-600 transition-all z-50 opacity-0 group-hover/page:opacity-100 backdrop-blur-md disabled:cursor-wait disabled:opacity-100 disabled:bg-slate-500/20"
+        title={isExporting ? 'Exporting PDF...' : 'Export as PDF'}
+      >
+        <Download size={20} />
+      </button>
+
       {/* Poster Container */}
-      <div className={`relative isolate w-full max-w-[640px] aspect-[594/841] ${theme.posterBg} shadow-[0_32px_80px_rgba(0,0,0,0.15)] overflow-hidden ring-1 ${theme.posterRing} ${theme.posterText} rounded-sm`}>
+      <div ref={posterRef} data-export-poster className={`relative isolate w-full max-w-[640px] aspect-[594/841] ${theme.posterBg} shadow-[0_32px_80px_rgba(0,0,0,0.15)] overflow-hidden ring-1 ${theme.posterRing} ${theme.posterText} rounded-sm`}>
         
         {/* 1. Base Background Grid */}
         <div className={`absolute inset-0 z-0 ${theme.gridOpacity}`}>
