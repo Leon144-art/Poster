@@ -571,23 +571,31 @@ export default function App() {
           </div>
 
           {/* Floating System Specifications Text */}
-          <div className="absolute left-0 pl-8 sm:pl-10 top-[32%] flex flex-col gap-2 pointer-events-auto z-30">
+          <div className="absolute left-0 pl-8 sm:pl-10 top-[32%] flex flex-col pointer-events-auto z-30">
             {/* Masked Backdrop Blur Background */}
             <div 
               className="absolute -inset-y-6 left-0 -right-4 z-[-1]"
               style={{
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
+                backdropFilter: 'blur(5px)',
+                WebkitBackdropFilter: 'blur(5px)',
                 background: 'linear-gradient(to right, rgba(148, 163, 184, 0.08), transparent)',
                 maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
                 WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
               }}
             />
-            <p className={`text-[12px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-2 border-b border-slate-400/30 pb-2 inline-block`}>
-              System Specifications
-            </p>
-            <div className="grid grid-cols-[80px_1fr] gap-x-4 gap-y-1.5 text-[11px] sm:text-[12px] font-mono relative">
-              <span className={`${theme.mutedSoft} font-semibold`}>SOFTWARE</span>
+            
+            {/* Content Wrapper with Brackets */}
+            <div className="relative flex flex-col gap-2 self-start">
+              {/* Top-Left Bracket ⌜ */}
+              <div className="absolute -top-3 -left-4 w-3 h-3 border-t-[1.5px] border-l-[1.5px] border-slate-400/80" />
+              {/* Bottom-Right Bracket ⌟ */}
+              <div className="absolute -bottom-3 -right-4 w-3 h-3 border-b-[1.5px] border-r-[1.5px] border-slate-400/80" />
+
+              <p className={`text-[12px] font-bold tracking-[0.3em] ${theme.mutedStrong} uppercase mb-0 border-b border-slate-400/30 pb-2 inline-block`}>
+                System Specifications
+              </p>
+              <div className="grid grid-cols-[80px_1fr] gap-x-4 gap-y-1.5 text-[11px] sm:text-[12px] font-mono relative">
+                <span className={`${theme.mutedSoft} font-semibold`}>SOFTWARE</span>
               <span className={`${theme.mutedStrong}`}>C++ / OpenCV</span>
               
               <span className={`${theme.mutedSoft} font-semibold`}>HOST</span>
@@ -607,6 +615,7 @@ export default function App() {
               
               <span className={`${theme.mutedSoft} font-semibold`}>POWER</span>
               <span className={`${theme.mutedStrong}`}>18650 × 2</span>
+            </div>
             </div>
           </div>
 
