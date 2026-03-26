@@ -1,9 +1,7 @@
 import React from 'react';
-import { Settings, Cpu, Download } from 'lucide-react';
+import { Settings, Cpu } from 'lucide-react';
 import vehicleImage from '../assets/test3.png';
 import nottinghamLogo from '../assets/nottingham_logo.png';
-import html2canvas from 'html2canvas-pro';
-import { jsPDF } from 'jspdf';
 
 // 切换主题：
 // 1 = 原始版本 (浅灰系 + 蓝黄双光晕，就是最开始的样子)
@@ -27,8 +25,6 @@ const SHOW_NIGHWAN_BLUR = false;
 export default function App() {
   const [cameraPos, setCameraPos] = React.useState({ x: 77.7, y: 65.5 });
   const [isDraggingCamera, setIsDraggingCamera] = React.useState(false);
-  const [isExporting, setIsExporting] = React.useState(false);
-  const posterRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
     if (!isDraggingCamera) return;
@@ -197,7 +193,7 @@ export default function App() {
       mutedStrong: 'text-slate-600',
       mutedStrongBg: 'bg-slate-400',
       muted: 'text-slate-500',
-      mutedSoft: 'text-slate-500/85',
+      mutedSoft: 'text-slate-400',
       lineStrong: 'bg-slate-300',
       lineSoft: 'bg-slate-200',
       // linedivider: 'bg-slate-300/100',
@@ -390,59 +386,10 @@ export default function App() {
     trail.arrowLetterSpacing,
   ]);
 
-  const handleExport = async () => {
-    const posterElement = posterRef.current;
-    if (!posterElement || isExporting) return;
-
-    try {
-      setIsExporting(true);
-
-      if ('fonts' in document) {
-        await (document as Document & { fonts: FontFaceSet }).fonts.ready;
-      }
-
-      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
-      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
-
-      const canvas = await html2canvas(posterElement, {
-        scale: Math.min(window.devicePixelRatio || 1, 3),
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        logging: false,
-      });
-
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'px',
-        format: [594, 841],
-        compress: true,
-      });
-
-      pdf.addImage(imgData, 'PNG', 0, 0, 594, 841);
-      pdf.save('Poster.pdf');
-    } catch (error) {
-      console.error('PDF export failed:', error);
-    } finally {
-      setIsExporting(false);
-    }
-  };
-
   return (
-    <div className={`min-h-screen ${theme.pageBg} flex items-center justify-center p-4 sm:p-8 font-sans overflow-hidden relative group/page`}>
-      
-      {/* Export Button - Hidden by default, visible on hover over page */}
-      <button
-        onClick={handleExport}
-        disabled={isExporting}
-        className="absolute bottom-8 right-8 p-3 rounded-full bg-slate-400/10 hover:bg-slate-500/30 text-slate-400 hover:text-slate-600 transition-all z-50 opacity-0 group-hover/page:opacity-100 backdrop-blur-md disabled:cursor-wait disabled:opacity-100 disabled:bg-slate-500/20"
-        title={isExporting ? 'Preparing PDF export...' : 'Export as PDF'}
-      >
-        <Download size={20} />
-      </button>
-
+    <div className={`min-h-screen ${theme.pageBg} flex items-center justify-center p-4 sm:p-8 font-sans overflow-hidden`}>
       {/* Poster Container */}
-      <div ref={posterRef} data-export-poster className={`relative isolate w-full max-w-[640px] aspect-[594/841] ${theme.posterBg} shadow-[0_32px_80px_rgba(0,0,0,0.15)] overflow-hidden ring-1 ${theme.posterRing} ${theme.posterText} rounded-sm`}>
+      <div className={`relative isolate w-full max-w-[640px] aspect-[594/841] ${theme.posterBg} shadow-[0_32px_80px_rgba(0,0,0,0.15)] overflow-hidden ring-1 ${theme.posterRing} ${theme.posterText} rounded-sm`}>
         
         {/* 1. Base Background Grid */}
         <div className={`absolute inset-0 z-0 ${theme.gridOpacity}`}>
@@ -674,16 +621,16 @@ export default function App() {
             <div className="flex-1"></div>
             {/* 右上角 Logo 与 版本号区域 */}
             {/* 调整位置：如果想整体往下移，可以在这里加 mt-4；想往左移，可以加 mr-4 */}
-            <div className="flex flex-col items-end gap-2 -mt-13">
+            <div className="flex flex-col items-end gap-2">
               {/* University Logo */}
               {/* 调整大小：修改 h-8 (手机端高度) 和 sm:h-10 (电脑端高度)。想变大可以改成 h-12 sm:h-16 */}
               <img 
                 src={nottinghamLogo} 
                 alt="University of Nottingham" 
-                className="h-8 sm:h-40 object-contain opacity-80 grayscale mix-blend-multiply translate-x-[6px]"
+                className="h-10 sm:h-12 object-contain opacity-80 grayscale mix-blend-multiply"
               />
               {/* 调整间距：修改 mt-1 (距离Logo的顶部间距) */}
-              <p className={`text-[10px] font-bold tracking-[0.2em] ${theme.mutedSoft} uppercase -mt-15`}>
+              <p className={`text-[10px] font-bold tracking-[0.2em] ${theme.mutedSoft} uppercase mt-1`}>
                 Proto-04
               </p>
             </div>
@@ -754,16 +701,16 @@ export default function App() {
                   <span className={`${theme.mutedSoft} font-semibold`}>SOFTWARE</span>
                   <span className={`${theme.mutedStrong}`}>C++ / OpenCV</span>
                   
-                  <span className={`${theme.mutedSoft} font-semibold`}>CONTROLLER</span>
+                  <span className={`${theme.mutedSoft} font-semibold`}>HOST</span>
                   <span className={`${theme.mutedStrong}`}>Raspberry Pi</span>
                   
                   <span className={`${theme.mutedSoft} font-semibold`}>VISION</span>
                   <span className={`${theme.mutedStrong}`}>Camera Module 3</span>
                   
-                  <span className={`${theme.mutedSoft} font-semibold`}>ACTUATION</span>
+                  <span className={`${theme.mutedSoft} font-semibold`}>MOTION</span>
                   <span className={`${theme.mutedStrong}`}>1-DOF SG90</span>
                   
-                  <span className={`${theme.mutedSoft} font-semibold`}>DRIVER</span>
+                  <span className={`${theme.mutedSoft} font-semibold`}>COMMS</span>
                   <span className={`${theme.mutedStrong}`}>UART Driver Board</span>
                   
                   <span className={`${theme.mutedSoft} font-semibold`}>CHASSIS</span>
