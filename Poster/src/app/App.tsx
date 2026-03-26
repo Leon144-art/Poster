@@ -680,12 +680,13 @@ export default function App() {
               <img 
                 src={nottinghamLogo} 
                 alt="University of Nottingham" 
-                className="h-8 sm:h-40 object-contain opacity-80 grayscale mix-blend-multiply translate-x-[6px]"
+                className="h-8 sm:h-40 object-contain opacity-80 grayscale mix-blend-multiply translate-x-[9px]"
               />
               {/* 调整间距：修改 mt-1 (距离Logo的顶部间距) */}
-              <p className={`text-[10px] font-bold tracking-[0.2em] ${theme.mutedSoft} uppercase -mt-15`}>
-                Proto-04
-              </p>
+              <div className="flex flex-col items-end gap-[3px] -mt-16 opacity-80 pt-1">
+                <div className={`h-[4px] w-15 rounded-full ${theme.lineStrong}`}></div>
+                <div className={`h-[3px] w-6 rounded-full ${theme.accentBg}`}></div>
+              </div>
             </div>
           </div>
 
@@ -695,8 +696,8 @@ export default function App() {
             <div 
               className="absolute -inset-y-6 left-0 -right-4 z-[-1]"
               style={{
-                backdropFilter: 'blur(6px)',
-                WebkitBackdropFilter: 'blur(5px)',
+                backdropFilter: 'blur(7px)',
+                WebkitBackdropFilter: 'blur(7px)',
                 background: 'linear-gradient(to right, rgba(148, 163, 184, 0.08), transparent)',
                 maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
                 WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',

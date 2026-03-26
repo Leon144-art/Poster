@@ -4,7 +4,7 @@ import { readFile, stat, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { chromium } from 'playwright';
+import { chromium, webkit } from 'playwright';
 import { jsPDF } from 'jspdf';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -85,23 +85,29 @@ async function createStaticServer(rootDir) {
 
 async function launchBrowser() {
   try {
-    return await chromium.launch({
-      channel: 'msedge',
-      headless: true,
-    });
-  } catch (edgeError) {
+    return await webkit.launch({ headless: true });
+  } catch (webkitError) {
     try {
-      return await chromium.launch({ headless: true });
-    } catch (fallbackError) {
-      throw new Error(
-        [
-          'Unable to launch a Chromium browser for PDF export.',
-          'Primary attempt: Microsoft Edge channel.',
-          `Edge error: ${edgeError instanceof Error ? edgeError.message : String(edgeError)}`,
-          `Fallback error: ${fallbackError instanceof Error ? fallbackError.message : String(fallbackError)}`,
-          'Install a supported browser or run: npx playwright install chromium',
-        ].join('\n')
-      );
+      return await chromium.launch({
+        channel: 'msedge',
+        headless: true,
+      });
+    } catch (edgeError) {
+      try {
+        return await chromium.launch({ headless: true });
+      } catch (fallbackError) {
+        throw new Error(
+          [
+            'Unable to launch a browser for PDF export.',
+            'Primary attempt: Playwright WebKit.',
+            `WebKit error: ${webkitError instanceof Error ? webkitError.message : String(webkitError)}`,
+            'Secondary attempt: Microsoft Edge channel.',
+            `Edge error: ${edgeError instanceof Error ? edgeError.message : String(edgeError)}`,
+            `Fallback Chromium error: ${fallbackError instanceof Error ? fallbackError.message : String(fallbackError)}`,
+            'Install a supported browser runtime or run: npx playwright install webkit chromium',
+          ].join('\n')
+        );
+      }
     }
   }
 }
