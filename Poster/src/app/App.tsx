@@ -464,7 +464,7 @@ export default function App() {
         {/* 2.4 Background Decorative Panels (BELOW LINE) */}
         <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
           {/* Panel 2: Bottom Left */}
-          <div className={`absolute bottom-[23%] left-[5%] w-56 h-36 ${theme.panelBase || 'bg-gradient-to-tr from-white/80 to-white/30 border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.05)]'} backdrop-blur-lg border rounded-2xl blur-[2.5px] p-4 flex flex-col gap-4 transform -rotate-2`}>
+          <div className={`absolute bottom-[23%] left-[5%] w-56 h-36 ${theme.panelBase || 'bg-gradient-to-tr from-white/80 to-white/30 border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.05)]'} backdrop-blur-lg border rounded-2xl blur-[3.5px] p-4 flex flex-col gap-4 transform -rotate-2`}>
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-full ${theme.panelInner || 'bg-gradient-to-tr from-white to-white border-white/90'} border shadow-sm flex items-center justify-center`}>
                  <Cpu className={`w-5 h-5 ${theme.accent}`} />
@@ -694,6 +694,7 @@ export default function App() {
           <div className="absolute left-0 pl-8 sm:pl-10 top-[30%] flex flex-col pointer-events-auto z-30 max-w-[335px]">
             {/* Masked Backdrop Blur Background (Shared) */}
             <div 
+              data-export-vision-blur
               className="absolute -inset-y-6 left-0 -right-4 z-[-1]"
               style={{
                 backdropFilter: 'blur(7px)',

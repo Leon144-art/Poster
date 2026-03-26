@@ -93,17 +93,18 @@ async function createStaticServer(rootDir) {
 }
 
 async function launchBrowser() {
+  const headed = process.env.EXPORT_HEADED === '1';
   try {
-    return await webkit.launch({ headless: true });
+    return await webkit.launch({ headless: !headed });
   } catch (webkitError) {
     try {
       return await chromium.launch({
         channel: 'msedge',
-        headless: true,
+        headless: !headed,
       });
     } catch (edgeError) {
       try {
-        return await chromium.launch({ headless: true });
+        return await chromium.launch({ headless: !headed });
       } catch (fallbackError) {
         throw new Error(
           [
@@ -143,6 +144,7 @@ async function waitForAssets(page) {
 }
 
 async function main() {
+  const headed = process.env.EXPORT_HEADED === '1';
   console.log('Building poster...');
   await runCommand('npm', ['run', 'build'], projectRoot);
 
@@ -169,6 +171,9 @@ async function main() {
 
     await page.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded' });
     await waitForAssets(page);
+    if (headed) {
+      await page.bringToFront();
+    }
     await page.addStyleTag({
       content: `
         [data-export-poster] {
@@ -202,6 +207,7 @@ async function main() {
       compress: true,
     });
 
+    await mkdir(outputDir, { recursive: true });
     pdf.addImage(
       `data:image/jpeg;base64,${imageBuffer.toString('base64')}`,
       'JPEG',
@@ -210,8 +216,6 @@ async function main() {
       A1_WIDTH_MM,
       A1_HEIGHT_MM
     );
-
-    await mkdir(outputDir, { recursive: true });
     await writeFile(outputPdf, Buffer.from(pdf.output('arraybuffer')));
 
     console.log(`PDF exported to: ${outputPdf}`);

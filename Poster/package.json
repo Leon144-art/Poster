@@ -6,7 +6,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "export:pdf": "node scripts/export-pdf.mjs"
+    "export:pdf": "node scripts/export-pdf.mjs",
+    "preview:safari": "node scripts/open-safari-preview.mjs"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
