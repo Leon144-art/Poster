@@ -13,6 +13,15 @@ const projectRoot = path.resolve(__dirname, '..');
 const distDir = path.join(projectRoot, 'dist');
 const outputDir = path.join(projectRoot, 'exports');
 const outputPdf = path.join(outputDir, 'Poster.pdf');
+const A1_WIDTH_MM = 594;
+const A1_HEIGHT_MM = 841;
+const TARGET_DPI = 300;
+const MM_PER_INCH = 25.4;
+const TARGET_WIDTH_PX = Math.round((A1_WIDTH_MM / MM_PER_INCH) * TARGET_DPI);
+const TARGET_HEIGHT_PX = Math.round((A1_HEIGHT_MM / MM_PER_INCH) * TARGET_DPI);
+const EXPORT_LAYOUT_WIDTH_PX = 640;
+const EXPORT_LAYOUT_HEIGHT_PX = Math.round((EXPORT_LAYOUT_WIDTH_PX * A1_HEIGHT_MM) / A1_WIDTH_MM);
+const EXPORT_SCALE = 6;
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -145,8 +154,8 @@ async function main() {
     console.log('Launching browser...');
     browser = await launchBrowser();
     const page = await browser.newPage({
-      viewport: { width: 1200, height: 1700 },
-      deviceScaleFactor: 2,
+      viewport: { width: EXPORT_LAYOUT_WIDTH_PX + 240, height: EXPORT_LAYOUT_HEIGHT_PX + 240 },
+      deviceScaleFactor: EXPORT_SCALE,
     });
 
     page.on('console', (message) => {
@@ -160,6 +169,17 @@ async function main() {
 
     await page.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded' });
     await waitForAssets(page);
+    await page.addStyleTag({
+      content: `
+        [data-export-poster] {
+          width: ${EXPORT_LAYOUT_WIDTH_PX}px !important;
+          max-width: ${EXPORT_LAYOUT_WIDTH_PX}px !important;
+          min-width: ${EXPORT_LAYOUT_WIDTH_PX}px !important;
+          aspect-ratio: ${A1_WIDTH_MM} / ${A1_HEIGHT_MM} !important;
+        }
+      `,
+    });
+    await page.waitForTimeout(200);
 
     await page.waitForFunction(() => !!document.querySelector('[data-export-poster]'), {
       timeout: 120000,
@@ -169,19 +189,27 @@ async function main() {
     await poster.waitFor({ state: 'visible', timeout: 120000 });
     await poster.scrollIntoViewIfNeeded();
 
-    const pngBuffer = await poster.screenshot({
-      type: 'png',
+    const imageBuffer = await poster.screenshot({
+      type: 'jpeg',
+      quality: 92,
       scale: 'device',
     });
 
     const pdf = new jsPDF({
       orientation: 'portrait',
-      unit: 'px',
-      format: [594, 841],
+      unit: 'mm',
+      format: 'a1',
       compress: true,
     });
 
-    pdf.addImage(`data:image/png;base64,${pngBuffer.toString('base64')}`, 'PNG', 0, 0, 594, 841);
+    pdf.addImage(
+      `data:image/jpeg;base64,${imageBuffer.toString('base64')}`,
+      'JPEG',
+      0,
+      0,
+      A1_WIDTH_MM,
+      A1_HEIGHT_MM
+    );
 
     await mkdir(outputDir, { recursive: true });
     await writeFile(outputPdf, Buffer.from(pdf.output('arraybuffer')));
